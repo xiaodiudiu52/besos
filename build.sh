@@ -13,8 +13,9 @@ URL="https://downloads.openwrt.org/releases/${VER}/targets/ramips/mt76x8/${IB}.t
 
 # 中文界面
 LANG_PKGS="luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-package-manager-zh-cn luci-i18n-commands-zh-cn"
-# 网页场景模式页面（Lua CBI 运行环境）
-LUA_PKGS="luci-lua-runtime luci-compat luci-app-commands"
+# Luci 完整界面 + 网页服务器
+# 注意：ImageBuilder 不会自动带 luci/uhttpd，必须显式写，否则网页打不开
+LUA_PKGS="luci uhttpd luci-lua-runtime luci-compat luci-app-commands"
 # 网页终端
 TTYD_PKGS="ttyd luci-app-ttyd"
 # 现场调试工具
