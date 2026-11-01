@@ -1,0 +1,81 @@
+name: 分析极GO原厂固件
+
+on:
+  push:
+    paths:
+      - '.github/workflows/analyze-stock.yml'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 解包原厂固件
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq squashfs-tools
+          mkdir -p /tmp/work && cd /tmp/work
+          curl -sL -o stock.bin "https://gitee.com/wter2000/HIWIFI/raw/master/BIN/HC5611-sysupgrade-20170606-44f46c15.bin"
+          echo "MD5: $(md5sum stock.bin)"
+          # kernel 在前面，squashfs 从 0x160000 = 1408KB 开始
+          dd if=stock.bin of=rootfs.squashfs bs=1024 skip=1408 2>/dev/null
+          unsquashfs -q -d rootfs rootfs.squashfs 2>&1 | tail -2
+          echo "解压完成"
+
+      - name: 分析 UI 技术栈
+        run: |
+          cd /tmp/work
+          mkdir -p "$GITHUB_WORKSPACE/stock-analysis"
+          R="$GITHUB_WORKSPACE/stock-analysis/report.txt"
+          {
+            echo "===== 顶层目录 ====="
+            ls rootfs/
+            echo ""
+            echo "===== 是否使用 LuCI ====="
+            if [ -d rootfs/usr/lib/lua/luci ]; then echo "有 LuCI 目录"; else echo "无 LuCI（自研 UI）"; fi
+            echo ""
+            echo "===== www 目录 ====="
+            ls rootfs/www/ 2>/dev/null || echo "(无 www)"
+            echo ""
+            echo "===== www 下文件数 ====="
+            find rootfs/www -type f 2>/dev/null | wc -l
+            echo ""
+            echo "===== www 目录树（前80行）====="
+            find rootfs/www -maxdepth 2 2>/dev/null | head -80
+            echo ""
+            echo "===== JS/CSS 线索 ====="
+            find rootfs/www -name "*.js" 2>/dev/null | head -15
+            find rootfs/www -name "*.css" 2>/dev/null | head -10
+            echo ""
+            echo "===== 极路由自研痕迹 ====="
+            find rootfs -maxdepth 3 -iname "*hiwifi*" 2>/dev/null | head -25
+            echo ""
+            echo "===== etc/config 配置 ====="
+            ls rootfs/etc/config/ 2>/dev/null | tr '\n' ' '
+            echo ""
+            echo "===== init.d 服务 ====="
+            ls rootfs/etc/init.d/ 2>/dev/null | tr '\n' ' '
+            echo ""
+            echo "===== Web 服务器相关 ====="
+            ls rootfs/usr/sbin/ 2>/dev/null | grep -iE "http|nginx|lighttpd|uhttpd" | tr '\n' ' '
+            echo ""
+            echo "===== 后端语言线索 ====="
+            ls rootfs/usr/bin/ 2>/dev/null | grep -iE "^(lua|python|php|node)" | tr '\n' ' '
+            echo ""
+            echo "===== 已装 opkg 包（前40）====="
+            cat rootfs/usr/lib/opkg/status 2>/dev/null | grep "^Package:" | head -40 | tr '\n' ' '
+          } > "$R" 2>&1
+          # 顺带把 UI 文件打包回来（体积可控时）
+          cd rootfs && tar czf "$GITHUB_WORKSPACE/stock-analysis/www.tar.gz" www 2>/dev/null || true
+          ls -lh "$GITHUB_WORKSPACE/stock-analysis/"
+
+      - name: 回传分析结果
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          git config user.email "action@users.noreply.github.com"
+          git config user.name "GitHub Action"
+          git add stock-analysis/
+          git commit -m "原厂固件分析结果 [skip ci]" || echo "无变化"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/xiaodiudiu52/besos.git HEAD:master
