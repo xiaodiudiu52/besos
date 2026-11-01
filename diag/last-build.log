@@ -1,0 +1,653 @@
+>>> 下载 OpenWrt ImageBuilder 24.10.8
+>>> 给注入的脚本加执行权限
+>>> 开始构建（约 5-15 分钟）
+Generate local signing keys...
+Generate local certificate...
+Checking 'true'... ok.
+Checking 'false'... ok.
+Checking 'working-make'... ok.
+Checking 'case-sensitive-fs'... ok.
+Checking 'proper-umask'... ok.
+Checking 'perl-data-dumper'... ok.
+Checking 'perl-findbin'... ok.
+Checking 'perl-file-copy'... ok.
+Checking 'perl-file-compare'... ok.
+Checking 'perl-thread-queue'... ok.
+Checking 'perl-ipc-cmd'... ok.
+Checking 'tar'... ok.
+Checking 'find'... ok.
+Checking 'bash'... updated.
+Checking 'xargs'... ok.
+Checking 'patch'... ok.
+Checking 'diff'... ok.
+Checking 'cp'... updated.
+Checking 'seq'... ok.
+Checking 'awk'... ok.
+Checking 'grep'... updated.
+Checking 'egrep'... updated.
+Checking 'getopt'... ok.
+Checking 'realpath'... ok.
+Checking 'stat'... ok.
+Checking 'gzip'... updated.
+Checking 'unzip'... ok.
+Checking 'bzip2'... ok.
+Checking 'wget'... ok.
+Checking 'install'... ok.
+Checking 'perl'... ok.
+Checking 'python'... updated.
+Checking 'python3'... updated.
+Checking 'python3-distutils'... ok.
+Checking 'python3-stdlib'... ok.
+Checking 'file'... ok.
+Checking 'which'... ok.
+Checking 'ldconfig-stub'... ok.
+Building images for ramips - HiWiFi HC5611
+Packages: luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-package-manager-zh-cn luci-i18n-commands-zh-cn luci-lua-runtime luci-compat luci-app-commands ttyd luci-app-ttyd tcpdump iperf3 ethtool arp-scan nmap ppp ppp-mod-pppoe luci-theme-material luci-theme-openwrt base-files ca-bundle dnsmasq dropbear firewall4 fstools kernel kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7603 kmod-nft-offload kmod-usb-ohci kmod-usb2 libc libgcc libustream-mbedtls logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe swconfig uci uclient-fetch urandom-seed urngd wpad-basic-mbedtls
+
+Package list missing or not up-to-date, generating it.
+
+Building package index...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_core
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_base
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_kmods
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_luci
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_packages
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/routing/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_routing
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/routing/Packages.sig
+Signature check passed.
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/telephony/Packages.gz
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/openwrt_telephony
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/telephony/Packages.sig
+Signature check passed.
+Downloading file:packages/Packages
+Updated list of available packages in /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/../../../../../../../../../home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/dl/imagebuilder
+Downloading file:packages/Packages.sig
+Signature check passed.
+
+Installing packages...
+Installing libc (1.2.5-r4) to root...
+Installing libgcc1 (13.3.0-r4) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/libgcc1_13.3.0-r4_mipsel_24kc.ipk
+Configuring libgcc1.
+Configuring libc.
+Installing kernel (6.6.144~4ca73159125334b180ac4bba6dc45839-r1) to root...
+Configuring kernel.
+Installing luci-i18n-base-zh-cn (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-i18n-base-zh-cn_26.301.70438~aa4865e_all.ipk
+Installing libubox20240329 (2025.07.23~49056d17-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libubox20240329_2025.07.23~49056d17-r1_mipsel_24kc.ipk
+Installing libubus20250102 (2025.10.17~60e04048-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libubus20250102_2025.10.17~60e04048-r1_mipsel_24kc.ipk
+Installing libuci20250120 (2025.01.20~16ff0bad-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libuci20250120_2025.01.20~16ff0bad-r1_mipsel_24kc.ipk
+Installing libjson-c5 (0.18-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libjson-c5_0.18-r1_mipsel_24kc.ipk
+Installing libblobmsg-json20240329 (2025.07.23~49056d17-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libblobmsg-json20240329_2025.07.23~49056d17-r1_mipsel_24kc.ipk
+Installing rpcd (2025.09.01~bba95191-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/rpcd_2025.09.01~bba95191-r2_mipsel_24kc.ipk
+Installing rpcd-mod-file (2025.09.01~bba95191-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/rpcd-mod-file_2025.09.01~bba95191-r2_mipsel_24kc.ipk
+Installing libnl-tiny1 (2025.03.19~c0df580a-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libnl-tiny1_2025.03.19~c0df580a-r1_mipsel_24kc.ipk
+Installing rpcd-mod-luci (20240305-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/rpcd-mod-luci_20240305-r1_mipsel_24kc.ipk
+Installing libucode20230711 (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libucode20230711_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing rpcd-mod-ucode (2025.09.01~bba95191-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/rpcd-mod-ucode_2025.09.01~bba95191-r2_mipsel_24kc.ipk
+Installing cgi-io (2026.07.21~31cb3c89-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/cgi-io_2026.07.21~31cb3c89-r1_mipsel_24kc.ipk
+Installing ucode (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-fs (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-fs_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-uci (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-uci_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-ubus (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-ubus_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-math (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-math_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-html (1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/ucode-mod-html_1_mipsel_24kc.ipk
+Installing liblucihttp0 (2023.03.15~9b5b683f-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/liblucihttp0_2023.03.15~9b5b683f-r1_mipsel_24kc.ipk
+Installing liblucihttp-ucode (2023.03.15~9b5b683f-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/liblucihttp-ucode_2023.03.15~9b5b683f-r1_mipsel_24kc.ipk
+Installing luci-base (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-base_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing luci-i18n-firewall-zh-cn (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-i18n-firewall-zh-cn_26.301.70438~aa4865e_all.ipk
+Installing kmod-nfnetlink (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nfnetlink_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-reject (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-reject_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-reject6 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-reject6_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-conntrack (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-conntrack_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-conntrack6 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-conntrack6_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-nat (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-nat_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-log (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-log_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-log6 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-log6_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-hash (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-hash_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-crc32c (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-crc32c_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-lib-crc32c (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-lib-crc32c_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nft-core (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nft-core_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nft-fib (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nft-fib_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nf-flow (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nf-flow_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nft-nat (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nft-nat_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nft-offload (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nft-offload_6.6.144-r1_mipsel_24kc.ipk
+Installing libmnl0 (1.0.5-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libmnl0_1.0.5-r1_mipsel_24kc.ipk
+Installing libnftnl11 (1.2.8-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libnftnl11_1.2.8-r1_mipsel_24kc.ipk
+Installing jansson4 (2.14-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/jansson4_2.14-r3_mipsel_24kc.ipk
+Installing nftables-json (1.1.1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/nftables-json_1.1.1-r1_mipsel_24kc.ipk
+Installing firewall4 (2024.12.18~18fc0ead-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/firewall4_2024.12.18~18fc0ead-r1_mipsel_24kc.ipk
+Installing luci-app-firewall (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-app-firewall_26.301.70438~aa4865e_all.ipk
+Installing luci-i18n-package-manager-zh-cn (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-i18n-package-manager-zh-cn_26.301.70438~aa4865e_all.ipk
+Installing luci-app-package-manager (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-app-package-manager_26.301.70438~aa4865e_all.ipk
+Installing luci-i18n-commands-zh-cn (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-i18n-commands-zh-cn_26.301.70438~aa4865e_all.ipk
+Installing luci-app-commands (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-app-commands_26.301.70438~aa4865e_all.ipk
+Installing luci-lua-runtime (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lua-runtime_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing liblua5.1.5 (5.1.5-r11) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/liblua5.1.5_5.1.5-r11_mipsel_24kc.ipk
+Installing lua (5.1.5-r11) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/lua_5.1.5-r11_mipsel_24kc.ipk
+Installing luci-lib-nixio (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lib-nixio_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing luci-lib-ip (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lib-ip_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing luci-lib-jsonc (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lib-jsonc_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing liblucihttp-lua (2023.03.15~9b5b683f-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/liblucihttp-lua_2023.03.15~9b5b683f-r1_mipsel_24kc.ipk
+Installing luci-lib-base (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lib-base_26.301.70438~aa4865e_all.ipk
+Installing libubus-lua (2025.10.17~60e04048-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libubus-lua_2025.10.17~60e04048-r1_mipsel_24kc.ipk
+Installing ucode-mod-lua (1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/ucode-mod-lua_1_mipsel_24kc.ipk
+Installing luci-compat (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-compat_26.301.70438~aa4865e_all.ipk
+Package luci-app-commands (26.301.70438~aa4865e) installed in root is up to date.
+Installing ttyd (1.7.3-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/ttyd_1.7.3-r1_mipsel_24kc.ipk
+Installing libcap (2.69-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libcap_2.69-r1_mipsel_24kc.ipk
+Installing libatomic1 (13.3.0-r4) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/libatomic1_13.3.0-r4_mipsel_24kc.ipk
+Installing libopenssl3 (3.0.22-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libopenssl3_3.0.22-r1_mipsel_24kc.ipk
+Installing libpthread (1.2.5-r4) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/libpthread_1.2.5-r4_mipsel_24kc.ipk
+Installing librt (1.2.5-r4) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/librt_1.2.5-r4_mipsel_24kc.ipk
+Installing libuv1 (1.48.0-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/libuv1_1.48.0-r1_mipsel_24kc.ipk
+Installing zlib (1.3.1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/zlib_1.3.1-r1_mipsel_24kc.ipk
+Installing libwebsockets-full (4.3.3-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/libwebsockets-full_4.3.3-r1_mipsel_24kc.ipk
+Installing luci-app-ttyd (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-app-ttyd_26.301.70438~aa4865e_all.ipk
+Installing tcpdump (4.99.5-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/tcpdump_4.99.5-r1_mipsel_24kc.ipk
+Installing libpcap1 (1.10.5-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libpcap1_1.10.5-r2_mipsel_24kc.ipk
+Installing iperf3 (3.22-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/iperf3_3.22-r1_mipsel_24kc.ipk
+Installing libiperf3 (3.22-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/libiperf3_3.22-r1_mipsel_24kc.ipk
+Installing ethtool (6.11-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ethtool_6.11-r1_mipsel_24kc.ipk
+Installing arp-scan (1.10.0-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/arp-scan_1.10.0-r2_mipsel_24kc.ipk
+Installing nmap (7.95-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/packages/nmap_7.95-r1_mipsel_24kc.ipk
+Installing libstdcpp6 (13.3.0-r4) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/libstdcpp6_13.3.0-r4_mipsel_24kc.ipk
+Installing libpcre2 (10.42-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libpcre2_10.42-r1_mipsel_24kc.ipk
+Installing ppp (2.5.1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ppp_2.5.1-r1_mipsel_24kc.ipk
+Installing kmod-lib-crc-ccitt (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-lib-crc-ccitt_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-slhc (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-slhc_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-ppp (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-ppp_6.6.144-r1_mipsel_24kc.ipk
+Installing ppp-mod-pppoe (2.5.1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ppp-mod-pppoe_2.5.1-r1_mipsel_24kc.ipk
+Installing kmod-pppox (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-pppox_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-pppoe (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-pppoe_6.6.144-r1_mipsel_24kc.ipk
+Installing luci-theme-material (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-theme-material_26.301.70438~aa4865e_all.ipk
+Installing luci-theme-openwrt (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-theme-openwrt_26.301.70438~aa4865e_all.ipk
+Installing base-files (1674~443ec4032a) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/base-files_1674~443ec4032a_mipsel_24kc.ipk
+Installing ubusd (2025.10.17~60e04048-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ubusd_2025.10.17~60e04048-r1_mipsel_24kc.ipk
+Installing ubus (2025.10.17~60e04048-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ubus_2025.10.17~60e04048-r1_mipsel_24kc.ipk
+Installing jshn (2025.07.23~49056d17-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/jshn_2025.07.23~49056d17-r1_mipsel_24kc.ipk
+Installing libudebug (2025.08.24~edeb4d6d) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libudebug_2025.08.24~edeb4d6d_mipsel_24kc.ipk
+Installing netifd (2025.05.23~7901e66c-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/netifd_2025.05.23~7901e66c-r1_mipsel_24kc.ipk
+Installing jsonfilter (2025.04.18~8a86fb78-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/jsonfilter_2025.04.18~8a86fb78-r1_mipsel_24kc.ipk
+Installing usign (2020.05.23~f1f65026-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/usign_2020.05.23~f1f65026-r1_mipsel_24kc.ipk
+Installing openwrt-keyring (2024.11.01~fbae29d7-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/openwrt-keyring_2024.11.01~fbae29d7-r2_mipsel_24kc.ipk
+Installing ubox (2024.04.26~85f10530-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ubox_2024.04.26~85f10530-r1_mipsel_24kc.ipk
+Installing fstools (2024.07.14~408c2cc4-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/fstools_2024.07.14~408c2cc4-r1_mipsel_24kc.ipk
+Installing fwtool (2019.11.12~8f7fe925-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/fwtool_2019.11.12~8f7fe925-r1_mipsel_24kc.ipk
+Installing libjson-script20240329 (2025.07.23~49056d17-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libjson-script20240329_2025.07.23~49056d17-r1_mipsel_24kc.ipk
+Installing procd (2026.03.14~c59f2d80-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/procd_2026.03.14~c59f2d80-r1_mipsel_24kc.ipk
+Installing procd-seccomp (2026.03.14~c59f2d80-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/procd-seccomp_2026.03.14~c59f2d80-r1_mipsel_24kc.ipk
+Installing busybox (1.36.1-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/busybox_1.36.1-r3_mipsel_24kc.ipk
+Installing ca-bundle (20260816-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ca-bundle_20260816-r2_all.ipk
+Installing dnsmasq (2.93-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/dnsmasq_2.93-r1_mipsel_24kc.ipk
+Installing dropbear (2024.86-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/dropbear_2024.86-r3_mipsel_24kc.ipk
+Package firewall4 (2024.12.18~18fc0ead-r1) installed in root is up to date.
+Package fstools (2024.07.14~408c2cc4-r1) installed in root is up to date.
+Package kernel (6.6.144~4ca73159125334b180ac4bba6dc45839-r1) installed in root is up to date.
+Installing kmod-gpio-button-hotplug (6.6.144-r5) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-gpio-button-hotplug_6.6.144-r5_mipsel_24kc.ipk
+Installing kmod-leds-gpio (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-leds-gpio_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-mt7603 (6.6.144.2025.11.06~eb567bc7-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-mt7603_6.6.144.2025.11.06~eb567bc7-r1_mipsel_24kc.ipk
+Installing iw (6.9-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/iw_6.9-r1_mipsel_24kc.ipk
+Installing libiwinfo-data (2024.10.20~b94f066e-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo-data_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
+Installing libiwinfo20230701 (2024.10.20~b94f066e-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo20230701_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
+Installing iwinfo (2024.10.20~b94f066e-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/iwinfo_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
+Installing ucode-mod-nl80211 (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-nl80211_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing ucode-mod-rtnl (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-rtnl_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Installing wifi-scripts (1.0-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/wifi-scripts_1.0-r1_all.ipk
+Installing wireless-regdb (2026.05.30-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/wireless-regdb_2026.05.30-r1_all.ipk
+Installing kmod-cfg80211 (6.6.144.6.12.96-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-cfg80211_6.6.144.6.12.96-r1_mipsel_24kc.ipk
+Installing kmod-crypto-cmac (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-cmac_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-null (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-null_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-aead (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-aead_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-manager (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-manager_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-hmac (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-hmac_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-sha512 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-sha512_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-sha3 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-sha3_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-rng (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-rng_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-geniv (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-geniv_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-seqiv (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-seqiv_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-ctr (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-ctr_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-ccm (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-ccm_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-gf128 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-gf128_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-ghash (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-ghash_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-crypto-gcm (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-crypto-gcm_6.6.144-r1_mipsel_24kc.ipk
+Installing hostapd-common (2024.09.15~5ace39b0-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/hostapd-common_2024.09.15~5ace39b0-r3_mipsel_24kc.ipk
+Installing kmod-mac80211 (6.6.144.6.12.96-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-mac80211_6.6.144.6.12.96-r1_mipsel_24kc.ipk
+Installing kmod-mt76-core (6.6.144.2025.11.06~eb567bc7-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-mt76-core_6.6.144.2025.11.06~eb567bc7-r1_mipsel_24kc.ipk
+Package kmod-nft-offload (6.6.144-r1) installed in root is up to date.
+Installing kmod-usb-ohci (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-usb-ohci_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-nls-base (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-nls-base_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-usb-core (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-usb-core_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-usb2 (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-usb2_6.6.144-r1_mipsel_24kc.ipk
+Installing kmod-usb-ehci (6.6.144-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-usb-ehci_6.6.144-r1_mipsel_24kc.ipk
+Package libc (1.2.5-r4) installed in root is up to date.
+Package libgcc1 (13.3.0-r4) installed in root is up to date.
+Installing libustream-mbedtls20201210 (2024.07.28~99bd3d2b-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libustream-mbedtls20201210_2024.07.28~99bd3d2b-r1_mipsel_24kc.ipk
+Installing libmbedtls21 (3.6.7-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libmbedtls21_3.6.7-r1_mipsel_24kc.ipk
+Installing logd (2024.04.26~85f10530-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/logd_2024.04.26~85f10530-r1_mipsel_24kc.ipk
+Installing mtd (26) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/mtd_26_mipsel_24kc.ipk
+Package netifd (2025.05.23~7901e66c-r1) installed in root is up to date.
+Package nftables-json (1.1.1-r1) installed in root is up to date.
+Installing odhcp6c (2024.09.25~b6ae9ffa-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/odhcp6c_2024.09.25~b6ae9ffa-r2_mipsel_24kc.ipk
+Installing odhcpd-ipv6only (2025.10.02~b14cf98c-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/odhcpd-ipv6only_2025.10.02~b14cf98c-r3_mipsel_24kc.ipk
+Installing opkg (2024.10.16~38eccbb1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/opkg_2024.10.16~38eccbb1-r1_mipsel_24kc.ipk
+Installing libuclient20201210 (2024.10.22~88ae8f20-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libuclient20201210_2024.10.22~88ae8f20-r1_mipsel_24kc.ipk
+Installing uclient-fetch (2024.10.22~88ae8f20-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/uclient-fetch_2024.10.22~88ae8f20-r1_mipsel_24kc.ipk
+Package ppp (2.5.1-r1) installed in root is up to date.
+Package ppp-mod-pppoe (2.5.1-r1) installed in root is up to date.
+Installing swconfig (12) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/swconfig_12_mipsel_24kc.ipk
+Installing uci (2025.01.20~16ff0bad-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/uci_2025.01.20~16ff0bad-r1_mipsel_24kc.ipk
+Package uclient-fetch (2024.10.22~88ae8f20-r1) installed in root is up to date.
+Installing urandom-seed (3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/urandom-seed_3_mipsel_24kc.ipk
+Installing getrandom (2024.04.26~85f10530-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/getrandom_2024.04.26~85f10530-r1_mipsel_24kc.ipk
+Installing urngd (2023.11.01~44365eb1-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/urngd_2023.11.01~44365eb1-r1_mipsel_24kc.ipk
+Installing wpad-basic-mbedtls (2024.09.15~5ace39b0-r3) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/wpad-basic-mbedtls_2024.09.15~5ace39b0-r3_mipsel_24kc.ipk
+Installing ucode-mod-uloop (2025.07.18~3f64c808-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/ucode-mod-uloop_2025.07.18~3f64c808-r2_mipsel_24kc.ipk
+Configuring libubox20240329.
+Configuring libubus20250102.
+Configuring libuci20250120.
+Configuring libjson-c5.
+Configuring libblobmsg-json20240329.
+Configuring rpcd.
+Configuring rpcd-mod-file.
+Configuring libnl-tiny1.
+Configuring rpcd-mod-luci.
+Configuring libucode20230711.
+Configuring rpcd-mod-ucode.
+Configuring cgi-io.
+Configuring ucode.
+Configuring ucode-mod-fs.
+Configuring ucode-mod-uci.
+Configuring ucode-mod-ubus.
+Configuring ucode-mod-math.
+Configuring ucode-mod-html.
+Configuring liblucihttp0.
+Configuring liblucihttp-ucode.
+Configuring luci-base.
+Configuring luci-theme-material.
+Configuring libiwinfo-data.
+Configuring libiwinfo20230701.
+Configuring iwinfo.
+Configuring libatomic1.
+Configuring libopenssl3.
+Configuring liblua5.1.5.
+Configuring lua.
+Configuring luci-lib-nixio.
+Configuring luci-lib-ip.
+Configuring luci-lib-jsonc.
+Configuring liblucihttp-lua.
+Configuring luci-lib-base.
+Configuring kmod-crypto-gf128.
+Configuring libuclient20201210.
+Configuring uclient-fetch.
+Configuring libpthread.
+Configuring opkg.
+Configuring zlib.
+Configuring libcap.
+Configuring librt.
+Configuring libuv1.
+Configuring libwebsockets-full.
+Configuring hostapd-common.
+Configuring ucode-mod-nl80211.
+Configuring ucode-mod-rtnl.
+Configuring ucode-mod-uloop.
+Configuring libudebug.
+Configuring libmbedtls21.
+Configuring wpad-basic-mbedtls.
+Configuring kmod-nls-base.
+Configuring kmod-usb-core.
+Configuring ubusd.
+Configuring ubus.
+Configuring iw.
+Configuring libiperf3.
+Configuring kmod-crypto-hash.
+Configuring kmod-crypto-null.
+Configuring kmod-crypto-aead.
+Configuring kmod-crypto-manager.
+Configuring busybox.
+Configuring kmod-crypto-hmac.
+Configuring kmod-crypto-sha512.
+Configuring kmod-crypto-sha3.
+Configuring kmod-crypto-rng.
+Configuring kmod-crypto-geniv.
+Configuring kmod-crypto-seqiv.
+Configuring kmod-crypto-ctr.
+Configuring kmod-nfnetlink.
+Configuring kmod-nf-reject.
+Configuring kmod-nf-reject6.
+Configuring kmod-nf-conntrack.
+Configuring kmod-nf-conntrack6.
+Configuring kmod-nf-nat.
+Configuring kmod-nf-log.
+Configuring kmod-nf-log6.
+Configuring kmod-crypto-crc32c.
+Configuring kmod-lib-crc32c.
+Configuring kmod-nft-core.
+Configuring kmod-nft-fib.
+Configuring libubus-lua.
+Configuring swconfig.
+Configuring kmod-nf-flow.
+Configuring kmod-lib-crc-ccitt.
+Configuring getrandom.
+Configuring luci-theme-openwrt.
+Configuring kmod-slhc.
+Configuring kmod-ppp.
+Configuring kmod-pppox.
+Configuring kmod-pppoe.
+Configuring ucode-mod-lua.
+Configuring luci-lua-runtime.
+Configuring jshn.
+Configuring netifd.
+Configuring jsonfilter.
+Configuring usign.
+Configuring openwrt-keyring.
+Configuring ubox.
+Configuring fstools.
+Configuring fwtool.
+Configuring libjson-script20240329.
+Configuring procd.
+Configuring procd-seccomp.
+Configuring base-files.
+Configuring ttyd.
+Configuring luci-app-ttyd.
+Configuring libustream-mbedtls20201210.
+Configuring kmod-nft-nat.
+Configuring kmod-nft-offload.
+Configuring libmnl0.
+Configuring libnftnl11.
+Configuring jansson4.
+Configuring nftables-json.
+Configuring firewall4.
+Configuring kmod-usb-ohci.
+Configuring dnsmasq.
+Configuring kmod-usb-ehci.
+Configuring kmod-usb2.
+Configuring luci-app-firewall.
+Configuring libpcap1.
+Configuring tcpdump.
+Configuring luci-app-commands.
+Configuring luci-i18n-commands-zh-cn.
+Configuring odhcp6c.
+Configuring kmod-crypto-ghash.
+Configuring ethtool.
+Configuring uci.
+Configuring libstdcpp6.
+Configuring libpcre2.
+Configuring nmap.
+Configuring dropbear.
+Configuring luci-compat.
+Configuring mtd.
+Configuring odhcpd-ipv6only.
+Configuring kmod-crypto-ccm.
+Configuring luci-app-package-manager.
+Configuring urandom-seed.
+Configuring luci-i18n-package-manager-zh-cn.
+Configuring ppp.
+Configuring kmod-leds-gpio.
+Configuring kmod-gpio-button-hotplug.
+Configuring logd.
+Configuring wifi-scripts.
+Configuring wireless-regdb.
+Configuring kmod-cfg80211.
+Configuring kmod-crypto-cmac.
+Configuring kmod-crypto-gcm.
+Configuring kmod-mac80211.
+Configuring kmod-mt76-core.
+Configuring kmod-mt7603.
+Configuring ca-bundle.
+Configuring luci-i18n-base-zh-cn.
+Configuring iperf3.
+Configuring urngd.
+Configuring luci-i18n-firewall-zh-cn.
+Configuring ppp-mod-pppoe.
+Configuring arp-scan.
+
+Finalizing root filesystem...
+
+Please install the arp-scan-database package in order to let arp-scan
+display additional information about vendor/manufacturer for each
+discovered device.
+
+Enabling boot
+Enabling bootcount
+Enabling cron
+Enabling dnsmasq
+Enabling done
+Enabling dropbear
+Enabling firewall
+Enabling gomode
+Enabling gomode-led
+Enabling gpio_switch
+Enabling led
+Enabling log
+Enabling network
+Enabling odhcpd
+Enabling packet_steering
+Enabling rpcd
+Enabling sysctl
+Enabling sysfixtime
+Enabling sysntpd
+Enabling system
+Enabling ttyd
+Enabling ucitrack
+Enabling umount
+Enabling urandom_seed
+Enabling urngd
+Enabling wpad
+
+Building images...
+Pseudo file "dev" exists in source filesystem "/home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/root-ramips/dev".
+Ignoring, exclude it (-e/-ef) to override.
+Parallel mksquashfs: Using 4 processors
+Creating 4.0 filesystem on /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/linux-ramips_mt76x8/root.squashfs, block size 1048576.
+[|                                                             ]    0/1185   0%[=============================================================/] 1185/1185 100%
+
+Exportable Squashfs 4.0 filesystem, xz compressed, data block size 1048576
+	compressed data, compressed metadata, compressed fragments,
+	no xattrs, compressed ids
+	duplicates are removed
+Filesystem size 8060.23 Kbytes (7.87 Mbytes)
+	22.65% of uncompressed filesystem size (35591.06 Kbytes)
+Inode table size 10374 bytes (10.13 Kbytes)
+	20.44% of uncompressed inode table size (50745 bytes)
+Directory table size 14834 bytes (14.49 Kbytes)
+	44.33% of uncompressed directory table size (33465 bytes)
+Number of duplicate files found 172
+Number of inodes 1536
+Number of files 1178
+Number of fragments 23
+Number of symbolic links 227
+Number of device nodes 1
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 130
+Number of hard-links 0
+Number of ids (unique uids + gids) 1
+Number of uids 1
+	unknown (0)
+Number of gids 1
+	unknown (0)
+3973+1 records in
+3973+1 records out
+2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00800013 s, 254 MB/s
+16120+1 records in
+16120+1 records out
+8253680 bytes (8.3 MB, 7.9 MiB) copied, 0.0332053 s, 249 MB/s
+padding image to 009d0000
+
+Calculating checksums...
+>>> 构建完成，固件：
+ls: cannot access 'bin/targets/ramips/mt76x8/*hiwifi_hc5611*custom*.bin': No such file or directory
