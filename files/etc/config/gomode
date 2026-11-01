@@ -1,0 +1,23 @@
+
+config main 'main'
+	option mode 'auto'
+	option current ''
+
+	option ap_ssid 'Go'
+	option ap_key ''
+
+	option up_ssid ''
+	option up_key ''
+
+	option ipaddr ''
+	option netmask '255.255.255.0'
+	option gateway ''
+	option dns1 '223.5.5.5'
+	option dns2 '114.114.114.114'
+
+	option pppoe_user ''
+	option pppoe_pass ''
+
+	option lan_ip '10.10.10.1'
+	option dhcp_start '100'
+	option dhcp_end '250'

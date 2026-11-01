@@ -1,0 +1,308 @@
+#!/bin/sh
+# ============================================================
+# 极GO (HC5611) 上网方式 / 场景配置
+#
+# 用法: gomode [auto|dhcp|static|pppoe|bridge|none|status|apply]
+#   auto    自动探测网口：有上级网络→dhcp，无→none
+#   dhcp    自动获取 IP（网口插客户网线，有 DHCP 服务器）
+#   static  手动指定 IP（上联没 DHCP，客户给固定 IP）
+#   pppoe   宽带拨号（PPPoE）
+#   bridge  无线桥接（上行走 WiFi，连现场无线）
+#   none    不联网（独立热点，本机做 DHCP 服务器调设备）
+#   status  显示当前状态
+#   apply   按 /etc/config/gomode 的 mode 应用
+#
+# 固定约定（任何模式都不变）：
+#   管理地址  默认 10.10.10.1（可在网页改）
+#   WiFi      永远属于 LAN → 永不失联
+# ============================================================
+
+get() { uci -q get gomode.main."$1" 2>/dev/null; }
+
+AP_SSID="$(get ap_ssid)"; [ -z "$AP_SSID" ] && AP_SSID="Go"
+AP_KEY="$(get ap_key)"
+LAN_IP="$(get lan_ip)"; [ -z "$LAN_IP" ] && LAN_IP="10.10.10.1"
+D_START="$(get dhcp_start)"; [ -z "$D_START" ] && D_START=100
+D_END="$(get dhcp_end)"; [ -z "$D_END" ] && D_END=250
+
+log() { echo "[gomode] $*"; }
+
+# ---------- 通用片段 ----------
+
+# 局域网：地址 + DHCP 地址池（任何模式都一样）
+setup_lan() {
+	uci -q set network.lan.ipaddr="$LAN_IP"
+	uci -q set network.lan.netmask='255.255.255.0'
+	uci -q set dhcp.lan.start="$D_START"
+	uci -q set dhcp.lan.limit=$((D_END - D_START + 1))
+}
+
+# WiFi：永远是 LAN 侧的 AP（AP_KEY 为空就是开放网络）
+setup_ap() {
+	uci -q delete wireless.default_radio0
+	uci -q delete wireless.sta_uplink
+	uci -q set wireless.radio0.disabled='0'
+	uci -q set wireless.radio0.channel='auto'
+	uci -q set wireless.default_radio0=wifi-iface
+	uci -q set wireless.default_radio0.device='radio0'
+	uci -q set wireless.default_radio0.network='lan'
+	uci -q set wireless.default_radio0.mode='ap'
+	uci -q set wireless.default_radio0.ssid="$AP_SSID"
+	if [ -n "$AP_KEY" ]; then
+		uci -q set wireless.default_radio0.encryption='psk2'
+		uci -q set wireless.default_radio0.key="$AP_KEY"
+	else
+		uci -q set wireless.default_radio0.encryption='none'
+		uci -q delete wireless.default_radio0.key
+	fi
+}
+
+# 网口作为 WAN（$1 = 协议）
+setup_wan_iface() {
+	uci -q delete network.wan
+	uci -q delete network.wan6
+	uci -q delete network.wwan
+	uci -q set network.wan=interface
+	uci -q set network.wan.device='eth0'
+	uci -q set network.wan.proto="$1"
+	uci -q delete network.@device[0].ports
+}
+
+# 网口回到 LAN
+setup_eth_lan() {
+	uci -q delete network.wan
+	uci -q delete network.wan6
+	uci -q delete network.wwan
+	uci -q set network.@device[0].ports='eth0'
+}
+
+# 防火墙 WAN 区域归属
+set_wan_zone() {
+	uci -q delete firewall.@zone[1].network
+	for n in "$@"; do
+		uci add_list firewall.@zone[1].network="$n"
+	done
+}
+
+mark() {
+	uci -q set gomode.main.current="$1"
+	uci -q commit gomode
+}
+
+apply_all() {
+	uci commit network
+	uci commit wireless
+	uci commit dhcp
+	uci commit firewall
+	/etc/init.d/network restart
+	/etc/init.d/firewall restart
+	wifi reload
+	# 立刻刷新一次 LED
+	[ -x /usr/bin/gomode-led ] && /usr/bin/gomode-led once &
+}
+
+# ---------- 各种上网方式 ----------
+
+mode_dhcp() {
+	log "上网方式：自动获取 IP（DHCP）"
+	setup_wan_iface dhcp
+	uci -q set network.wan6=interface
+	uci -q set network.wan6.device='eth0'
+	uci -q set network.wan6.proto='dhcpv6'
+	setup_lan
+	setup_ap
+	set_wan_zone wan wan6
+	mark dhcp
+	apply_all
+	log "完成 → http://$LAN_IP （此时网线是 WAN，请连 WiFi「$AP_SSID」管理）"
+}
+
+mode_static() {
+	ipaddr="$(get ipaddr)"
+	netmask="$(get netmask)"; [ -z "$netmask" ] && netmask="255.255.255.0"
+	gw="$(get gateway)"
+	dns1="$(get dns1)"
+	dns2="$(get dns2)"
+	if [ -z "$ipaddr" ] || [ -z "$gw" ]; then
+		log "错误：静态 IP 方式必须填「IP 地址」和「网关」"
+		log "网页：网络 → 场景模式里填；或命令行 uci set gomode.main.ipaddr=..."
+		exit 1
+	fi
+	log "上网方式：手动指定 IP $ipaddr（网关 $gw）"
+	setup_wan_iface static
+	uci -q set network.wan.ipaddr="$ipaddr"
+	uci -q set network.wan.netmask="$netmask"
+	uci -q set network.wan.gateway="$gw"
+	if [ -n "$dns1" ]; then
+		uci -q set network.wan.dns="$dns1 $dns2"
+	fi
+	setup_lan
+	setup_ap
+	set_wan_zone wan
+	mark static
+	apply_all
+	log "完成 → http://$LAN_IP（请连 WiFi「$AP_SSID」管理）"
+}
+
+mode_pppoe() {
+	u="$(get pppoe_user)"
+	p="$(get pppoe_pass)"
+	if [ -z "$u" ]; then
+		log "错误：PPPoE 方式必须填「宽带用户名」"
+		exit 1
+	fi
+	log "上网方式：宽带拨号（PPPoE）账号 $u"
+	setup_wan_iface pppoe
+	uci -q set network.wan.username="$u"
+	uci -q set network.wan.password="$p"
+	setup_lan
+	setup_ap
+	set_wan_zone wan
+	mark pppoe
+	apply_all
+	log "完成 → http://$LAN_IP（请连 WiFi「$AP_SSID」管理）"
+}
+
+mode_bridge() {
+	ssid="$(get up_ssid)"
+	key="$(get up_key)"
+	if [ -z "$ssid" ]; then
+		log "错误：无线桥接必须填「现场 WiFi 名称」"
+		exit 1
+	fi
+	log "上网方式：无线桥接（连接 $ssid）"
+	setup_eth_lan
+	uci -q set network.wwan=interface
+	uci -q set network.wwan.proto='dhcp'
+	setup_lan
+	setup_ap
+	uci -q set wireless.sta_uplink=wifi-iface
+	uci -q set wireless.sta_uplink.device='radio0'
+	uci -q set wireless.sta_uplink.network='wwan'
+	uci -q set wireless.sta_uplink.mode='sta'
+	uci -q set wireless.sta_uplink.ssid="$ssid"
+	uci -q set wireless.sta_uplink.encryption='psk2'
+	uci -q set wireless.sta_uplink.key="$key"
+	set_wan_zone wwan
+	mark bridge
+	apply_all
+	log "完成 → http://$LAN_IP（WiFi 或网线都能进）"
+}
+
+mode_none() {
+	log "上网方式：不联网（独立热点，本机做 DHCP 服务器）"
+	setup_eth_lan
+	setup_lan
+	setup_ap
+	set_wan_zone wan wan6
+	mark none
+	apply_all
+	log "完成 → http://$LAN_IP（WiFi 或网线都能进）"
+}
+
+# ---------- 自动探测 ----------
+
+link_up() {
+	[ "$(cat /sys/class/net/eth0/carrier 2>/dev/null)" = "1" ]
+}
+
+probe_dhcp() {
+	ip link set eth0 down 2>/dev/null
+	ip link set eth0 nomaster 2>/dev/null
+	ip link set eth0 up 2>/dev/null
+	sleep 1
+	printf '#!/bin/sh\nexit 0\n' > /tmp/gomode_probe.sh
+	chmod +x /tmp/gomode_probe.sh
+	udhcpc -i eth0 -t 2 -T 5 -n -q \
+		-s /tmp/gomode_probe.sh -p /tmp/gomode_probe.pid >/dev/null 2>&1
+	ret=$?
+	ip addr flush dev eth0 2>/dev/null
+	return $ret
+}
+
+mode_auto() {
+	log "自动探测网口…"
+	if ! link_up; then
+		log "网线未连接 → 不联网（独立热点）"
+		target=none
+	elif probe_dhcp; then
+		log "检测到上级网络 → 自动获取 IP"
+		target=dhcp
+	else
+		log "网口已连接但没有 DHCP 服务器 → 不联网（独立热点）"
+		log "如果上联需要固定 IP，请在网页选「手动指定 IP」"
+		target=none
+	fi
+
+	if [ "$(get current)" = "$target" ]; then
+		log "当前已是 $target 模式，无需变更"
+		return 0
+	fi
+	mode_$target
+}
+
+# ---------- 状态 ----------
+
+mode_status() {
+	echo "==================================="
+	echo "  极GO 当前状态"
+	echo "==================================="
+	cur="$(get current)"
+	echo "  上网方式：$cur"
+	echo ""
+	case "$cur" in
+		dhcp)
+			echo "  网口：WAN（自动获取 IP）"
+			ip=$(ifstatus wan 2>/dev/null | grep -m1 '"address"' | grep -o '[0-9.]*')
+			echo "  拿到 IP：${ip:-未获取}"
+			;;
+		static)
+			echo "  网口：WAN（静态 IP $(get ipaddr)）"
+			;;
+		pppoe)
+			echo "  网口：WAN（PPPoE 拨号 $(get pppoe_user)）"
+			;;
+		bridge)
+			echo "  上行：无线桥接（$(get up_ssid)）"
+			;;
+		*)
+			echo "  上行：无（独立热点）"
+			;;
+	esac
+	if [ "$cur" != "none" ]; then
+		if ping -c 1 -W 3 223.5.5.5 >/dev/null 2>&1; then
+			echo "  互联网：已连通 ✓"
+		else
+			echo "  互联网：不通（检查上联）"
+		fi
+	fi
+	echo ""
+	echo "  管理地址：http://$LAN_IP"
+	echo "  WiFi：$AP_SSID$( [ -z "$AP_KEY" ] && echo "（无密码）" || echo "（有密码）")"
+	echo ""
+	echo "  切换：gomode auto|dhcp|static|pppoe|bridge|none"
+	echo "==================================="
+}
+
+# ---------- 入口 ----------
+
+case "$1" in
+	dhcp)   mode_dhcp ;;
+	static) mode_static ;;
+	pppoe)  mode_pppoe ;;
+	bridge) mode_bridge ;;
+	none)   mode_none ;;
+	auto)   mode_auto ;;
+	apply)
+		case "$(get mode)" in
+			dhcp)   mode_dhcp ;;
+			static) mode_static ;;
+			pppoe)  mode_pppoe ;;
+			bridge) mode_bridge ;;
+			none)   mode_none ;;
+			*)      mode_auto ;;
+		esac
+		;;
+	status|"") mode_status ;;
+	*) echo "用法: gomode [auto|dhcp|static|pppoe|bridge|none|status]"; exit 1 ;;
+esac

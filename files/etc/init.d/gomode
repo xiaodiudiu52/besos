@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+
+START=95
+STOP=10
+
+start() {
+	# 只有场景设为「自动」时才开机探测网口
+	[ "$(uci -q get gomode.main.mode)" = "auto" ] || exit 0
+
+	# 等网络服务就绪再探测
+	sleep 8
+
+	/usr/bin/gomode auto
+}

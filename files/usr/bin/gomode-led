@@ -1,0 +1,83 @@
+#!/bin/sh
+# ============================================================
+# 极GO LED 状态指示
+#
+#   颜色 = 当前场景        闪烁 = 互联网状态
+#   -------------------------------------------------
+#   绿灯常亮  = 网口上网（DHCP/静态IP/PPPoE），已联网
+#   绿灯慢闪  = 网口上网，但互联网不通
+#   黄灯常亮  = 无线桥接，已联网        （红+绿同亮）
+#   黄灯慢闪  = 无线桥接，互联网不通
+#   红灯常亮  = 独立热点（本来就不联网）
+#   红灯快闪  = 启动中 / 状态未知
+#
+# 用法: gomode-led [once]     once = 只刷新一次就退出
+# ============================================================
+
+G=/sys/class/leds/green:system
+R=/sys/class/leds/red:internet
+
+setled() {   # $1=LED路径  $2=on|off|slow|fast
+	case "$2" in
+		on)
+			echo none > "$1/trigger" 2>/dev/null
+			echo 1 > "$1/brightness" 2>/dev/null
+			;;
+		off)
+			echo none > "$1/trigger" 2>/dev/null
+			echo 0 > "$1/brightness" 2>/dev/null
+			;;
+		slow)
+			echo timer > "$1/trigger" 2>/dev/null
+			echo 700 > "$1/delay_on" 2>/dev/null
+			echo 700 > "$1/delay_off" 2>/dev/null
+			;;
+		fast)
+			echo timer > "$1/trigger" 2>/dev/null
+			echo 150 > "$1/delay_on" 2>/dev/null
+			echo 150 > "$1/delay_off" 2>/dev/null
+			;;
+	esac
+}
+
+net_ok() {
+	ping -c 1 -W 3 223.5.5.5 >/dev/null 2>&1 && return 0
+	ping -c 1 -W 3 114.114.114.114 >/dev/null 2>&1 && return 0
+	return 1
+}
+
+update() {
+	mode=$(uci -q get gomode.main.current 2>/dev/null)
+	case "$mode" in
+		dhcp|static|pppoe)
+			if net_ok; then setled $G on;   setled $R off
+			else            setled $G slow; setled $R off
+			fi
+			;;
+		bridge)
+			if net_ok; then setled $G on;   setled $R on
+			else            setled $G slow; setled $R slow
+			fi
+			;;
+		none)
+			setled $G off; setled $R on
+			;;
+		*)
+			setled $G off; setled $R fast
+			;;
+	esac
+}
+
+if [ "$1" = "once" ]; then
+	update
+	exit 0
+fi
+
+# 开机阶段先快闪，等探测出结果后由循环接管
+setled $G off
+setled $R fast
+
+while true; do
+	update
+	sleep 30
+done

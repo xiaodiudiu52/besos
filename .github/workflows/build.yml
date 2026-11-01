@@ -1,0 +1,29 @@
+name: 构建极路由Go定制固件
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装构建依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libncurses-dev zlib1g-dev \
+            gawk git gettext unzip zstd python3 rsync
+
+      - name: 构建定制固件
+        run: bash build.sh
+
+      - name: 上传固件
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-hc5611-custom
+          path: openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*hiwifi_hc5611*custom*.bin
+          retention-days: 30

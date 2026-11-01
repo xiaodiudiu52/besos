@@ -1,0 +1,40 @@
+#!/bin/sh
+# 极GO (HC5611) 定制初始化
+# 首次启动、以及每次恢复出厂设置后的首次启动，各执行一次
+
+# 1. 管理地址固定为 10.10.10.1
+uci -q set network.lan.ipaddr='10.10.10.1'
+uci -q set network.lan.netmask='255.255.255.0'
+uci -q commit network
+
+# 2. LuCI 默认简体中文 + Material 主题
+uci -q set luci.main.lang='zh_cn'
+uci -q set luci.main.mediaurlbase='/luci-static/material'
+uci -q commit luci
+
+# 3. 主机名与时区
+uci -q set system.@system[0].hostname='JiGo'
+uci -q set system.@system[0].timezone='CST-8'
+uci -q set system.@system[0].zonename='Asia/Shanghai'
+uci -q commit system
+
+# 4. 关掉系统自带的 LED 规则，交给 gomode-led 统一控制
+uci -q delete system.led_internet
+uci -q commit system
+
+# 5. 网页「系统 → 自定义命令」里的快捷按钮
+uci -q batch <<'EOF'
+add luci command
+set luci.@command[-1].name='扫描局域网设备'
+set luci.@command[-1].command='arp-scan --localnet'
+add luci command
+set luci.@command[-1].name='查看当前状态'
+set luci.@command[-1].command='/usr/bin/gomode status'
+EOF
+uci -q commit luci
+
+# 6. 开机自启：网口场景探测 + LED 状态指示
+/etc/init.d/gomode enable
+/etc/init.d/gomode-led enable
+
+exit 0
