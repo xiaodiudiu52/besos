@@ -38,6 +38,18 @@ jobs:
           path: openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*sysupgrade*.bin
           retention-days: 30
 
+      - name: 固件归档到仓库
+        if: steps.build.outputs.exit_code == '0'
+        run: |
+          mkdir -p firmware
+          cp openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*sysupgrade*.bin firmware/
+          cp openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/sha256sums firmware/ || true
+          git config user.email "action@users.noreply.github.com"
+          git config user.name "GitHub Action"
+          git add firmware/
+          git commit -m "定制固件 [skip ci]"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/xiaodiudiu52/besos.git HEAD:master
+
       - name: 回传构建日志
         if: always()
         run: |
