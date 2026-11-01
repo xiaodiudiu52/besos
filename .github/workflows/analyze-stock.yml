@@ -12,75 +12,84 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 解包原厂固件（带错误捕获）
+      - name: 解包原厂固件
         run: |
           mkdir -p /tmp/work && cd /tmp/work
+          exec > >(tee -a /tmp/work/unpack.log) 2>&1
+
           sudo apt-get update -qq 2>&1 | tail -1 || echo "APT_UPDATE_FAIL"
-          sudo apt-get install -y -qq squashfs-tools 2>&1 | tail -2 || echo "APT_INSTALL_FAIL"
+          sudo apt-get install -y -qq squashfs-tools p7zip-full 2>&1 | tail -2 || echo "APT_INSTALL_FAIL"
 
           curl -sL -o stock.bin "https://gitee.com/wter2000/HIWIFI/raw/master/BIN/HC5611-sysupgrade-20170606-44f46c15.bin" || echo "DOWNLOAD_FAIL"
-          ls -lh stock.bin 2>/dev/null || echo "NO_FILE"
-          md5sum stock.bin 2>/dev/null
+          ls -lh stock.bin
+          md5sum stock.bin
 
-          dd if=stock.bin of=rootfs.squashfs bs=1024 skip=1408 2>/dev/null || echo "DD_FAIL"
-          ls -lh rootfs.squashfs 2>/dev/null || echo "NO_SQUASHFS"
+          # 自动定位 squashfs magic（hsqs），不靠猜偏移
+          OFF=$(python3 -c "
+          d=open('/tmp/work/stock.bin','rb').read()
+          p=d.find(b'hsqs')
+          print(p//1024 if p>0 else 1408)
+          ")
+          echo "squashfs 起始 KB = $OFF"
+          dd if=stock.bin of=rootfs.squashfs bs=1024 skip=$OFF 2>/dev/null
+          ls -lh rootfs.squashfs
 
-          echo "===== superblock 信息 ====="
-          unsquashfs -s rootfs.squashfs 2>&1 | head -15 || echo "SUPERBLOCK_FAIL"
+          echo "===== superblock ====="
+          unsquashfs -s rootfs.squashfs 2>&1 | head -20
 
-          echo "===== 解压尝试 ====="
-          unsquashfs -q -d rootfs rootfs.squashfs 2>&1 | head -15 || echo "UNSQUASH_FAIL"
+          echo "===== 解压 ====="
+          unsquashfs -q -d rootfs rootfs.squashfs 2>&1 | head -10
 
           echo "===== 解压结果 ====="
-          ls rootfs 2>/dev/null | head -12 || echo "(空，解压失败)"
+          ls rootfs 2>/dev/null | head -12 || echo "(空)"
 
-      - name: 生成报告（即使上一步失败也执行）
+      - name: 生成报告
         if: always()
         run: |
-          cd /tmp/work 2>/dev/null || mkdir -p /tmp/work && cd /tmp/work
           mkdir -p "$GITHUB_WORKSPACE/stock-analysis"
           R="$GITHUB_WORKSPACE/stock-analysis/report.txt"
           {
-            echo "===== 顶层目录 ====="
-            ls rootfs/ 2>/dev/null || echo "(无)"
+            echo "########## 解包日志 ##########"
+            cat /tmp/work/unpack.log 2>/dev/null || echo "(无日志)"
             echo ""
-            echo "===== 是否使用 LuCI ====="
-            [ -d rootfs/usr/lib/lua/luci ] && echo "有 LuCI" || echo "无 LuCI（自研 UI）"
+            echo "########## 目录结构 ##########"
+            echo "===== 顶层 ====="
+            ls /tmp/work/rootfs/ 2>/dev/null || echo "(无)"
             echo ""
-            echo "===== www 目录 ====="
-            ls rootfs/www/ 2>/dev/null || echo "(无 www)"
+            echo "===== LuCI? ====="
+            [ -d /tmp/work/rootfs/usr/lib/lua/luci ] && echo "有 LuCI" || echo "无 LuCI（自研 UI）"
+            echo ""
+            echo "===== www ====="
+            ls /tmp/work/rootfs/www/ 2>/dev/null || echo "(无)"
             echo ""
             echo "===== www 文件数 ====="
-            find rootfs/www -type f 2>/dev/null | wc -l
+            find /tmp/work/rootfs/www -type f 2>/dev/null | wc -l
             echo ""
-            echo "===== www 目录树 ====="
-            find rootfs/www -maxdepth 2 2>/dev/null | head -60
+            echo "===== www 树 ====="
+            find /tmp/work/rootfs/www -maxdepth 2 2>/dev/null | head -50
             echo ""
-            echo "===== JS 文件 ====="
-            find rootfs/www -name "*.js" 2>/dev/null | head -12
+            echo "===== JS ====="
+            find /tmp/work/rootfs/www -name "*.js" 2>/dev/null | head -10
             echo ""
-            echo "===== CSS 文件 ====="
-            find rootfs/www -name "*.css" 2>/dev/null | head -8
-            echo ""
-            echo "===== 极路由自研痕迹 ====="
-            find rootfs -maxdepth 3 -iname "*hiwifi*" 2>/dev/null | head -20
+            echo "===== 自研痕迹 hiwifi ====="
+            find /tmp/work/rootfs -maxdepth 3 -iname "*hiwifi*" 2>/dev/null | head -20
             echo ""
             echo "===== etc/config ====="
-            ls rootfs/etc/config/ 2>/dev/null | tr '\n' ' '
+            ls /tmp/work/rootfs/etc/config/ 2>/dev/null | tr '\n' ' '
             echo ""
-            echo "===== init.d 服务 ====="
-            ls rootfs/etc/init.d/ 2>/dev/null | tr '\n' ' '
+            echo "===== init.d ====="
+            ls /tmp/work/rootfs/etc/init.d/ 2>/dev/null | tr '\n' ' '
             echo ""
             echo "===== Web 服务器 ====="
-            ls rootfs/usr/sbin/ 2>/dev/null | grep -iE "http|nginx|lighttpd|uhttpd" | tr '\n' ' '
+            ls /tmp/work/rootfs/usr/sbin/ 2>/dev/null | grep -iE "http|nginx|lighttpd|uhttpd" | tr '\n' ' '
             echo ""
             echo "===== 后端语言 ====="
-            ls rootfs/usr/bin/ 2>/dev/null | grep -iE "^(lua|python|php|node)" | tr '\n' ' '
+            ls /tmp/work/rootfs/usr/bin/ 2>/dev/null | grep -iE "^(lua|python|php|node)" | tr '\n' ' '
             echo ""
-            echo "===== opkg 已装包 ====="
-            grep "^Package:" rootfs/usr/lib/opkg/status 2>/dev/null | head -50 | tr '\n' ' '
+            echo "===== opkg 包 ====="
+            grep "^Package:" /tmp/work/rootfs/usr/lib/opkg/status 2>/dev/null | head -45 | tr '\n' ' '
           } > "$R" 2>&1
-          cd rootfs 2>/dev/null && tar czf "$GITHUB_WORKSPACE/stock-analysis/www.tar.gz" www 2>/dev/null || echo "打包跳过"
+          cd /tmp/work/rootfs 2>/dev/null && tar czf "$GITHUB_WORKSPACE/stock-analysis/www.tar.gz" www 2>/dev/null || echo "打包跳过"
           ls -lh "$GITHUB_WORKSPACE/stock-analysis/" 2>/dev/null
 
       - name: 回传分析结果
