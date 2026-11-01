@@ -94,8 +94,8 @@ Flash 固件分区 **15.44 MB**（`mtd3: 00f70000`），官方纯净镜像 5.5 M
 |---|---|
 | 官方基础镜像 | 5.5 MB |
 | 新增软件（压缩后实际计入固件） | 约 3.6 MB |
-| **预计固件总大小** | **约 9.1 MB** |
-| 剩余余量 | 约 6.3 MB ✅ |
+| **实测固件总大小** | **10 MB** |
+| 剩余余量 | 约 5.4 MB ✅ |
 
 > 上表"装后体积"是解压占用，固件里 squashfs 是压缩存储的。
 > 比如 nmap 解压后 11.9 MB，但压缩进固件只占 2.37 MB——这是它能装下的原因。
@@ -151,7 +151,7 @@ git push -u origin main
 
 3. 打开 `https://github.com/你的用户名/仓库名/actions`，「构建极路由Go定制固件」在跑，**5~15 分钟**变绿
 4. 点进去 → 页面下方 **Artifacts** → 下载 `openwrt-hc5611-custom`
-5. 解压得到 `openwrt-24.10.8-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade-custom.bin`
+5. 解压得到 `openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin`（10 MB）
 
 **如果构建报固件过大**：编辑 `build.sh`，从 `TOOLS_PKGS` 里去掉 `nmap` 重跑。
 **本地构建（可选）**：装 OrbStack（`brew install --cask orbstack`）后跑 build.sh。

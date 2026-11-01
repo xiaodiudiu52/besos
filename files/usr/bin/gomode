@@ -57,6 +57,16 @@ setup_ap() {
 	fi
 }
 
+# 找到 name='br-lan' 的 device 段下标（按名字找，不靠编号猜）
+brlan_idx() {
+	i=0
+	while uci -q get network.@device[$i] >/dev/null 2>&1; do
+		[ "$(uci -q get network.@device[$i].name)" = "br-lan" ] && { echo "$i"; return 0; }
+		i=$((i+1))
+	done
+	echo 0
+}
+
 # 网口作为 WAN（$1 = 协议）
 setup_wan_iface() {
 	uci -q delete network.wan
@@ -65,7 +75,8 @@ setup_wan_iface() {
 	uci -q set network.wan=interface
 	uci -q set network.wan.device='eth0'
 	uci -q set network.wan.proto="$1"
-	uci -q delete network.@device[0].ports
+	uci -q delete network.@device[$(brlan_idx)].ports
+	ETH_IN_LAN=0
 }
 
 # 网口回到 LAN
@@ -73,7 +84,10 @@ setup_eth_lan() {
 	uci -q delete network.wan
 	uci -q delete network.wan6
 	uci -q delete network.wwan
-	uci -q set network.@device[0].ports='eth0'
+	idx=$(brlan_idx)
+	uci -q delete network.@device[$idx].ports
+	uci add_list network.@device[$idx].ports='eth0'
+	ETH_IN_LAN=1
 }
 
 # 防火墙 WAN 区域归属
@@ -90,13 +104,44 @@ mark() {
 }
 
 apply_all() {
+	# ① 切换前备份，万一新的起不来能还原（绝不让自己失联）
+	mkdir -p /tmp/gomode_bak
+	for c in network wireless dhcp firewall; do
+		cp /etc/config/$c /tmp/gomode_bak/ 2>/dev/null
+	done
+
 	uci commit network
 	uci commit wireless
 	uci commit dhcp
 	uci commit firewall
+
+	# ② 先让网口脱离任何主接口，清掉残留状态再重启网络
+	ip link set eth0 nomaster 2>/dev/null
+
 	/etc/init.d/network restart
 	/etc/init.d/firewall restart
 	wifi reload
+
+	# ③ 网口该属于 LAN 时，强制挂回桥
+	#    （实测发现 network restart 偶尔不会把 eth0 真正挂进 br-lan）
+	if [ "${ETH_IN_LAN:-1}" = "1" ]; then
+		ip link set eth0 master br-lan 2>/dev/null
+	fi
+
+	# ④ 自检：局域网必须拿到管理地址，否则自动回滚
+	sleep 4
+	if ! ip -4 addr show br-lan 2>/dev/null | grep -q "$LAN_IP"; then
+		log "！新配置下局域网没拿到 $LAN_IP，自动回滚到刚才的配置"
+		for c in network wireless dhcp firewall; do
+			cp /tmp/gomode_bak/$c /etc/config/ 2>/dev/null
+		done
+		/etc/init.d/network restart
+		/etc/init.d/firewall restart
+		wifi reload
+		ip link set eth0 master br-lan 2>/dev/null
+		return 1
+	fi
+
 	# 立刻刷新一次 LED
 	[ -x /usr/bin/gomode-led ] && /usr/bin/gomode-led once &
 }
