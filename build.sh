@@ -49,5 +49,5 @@ make image \
 	FILES="${FILES}" \
 	EXTRA_IMAGE_NAME="custom"
 
-echo ">>> 构建完成，固件："
-ls -lh bin/targets/ramips/mt76x8/*hiwifi_hc5611*custom*.bin
+echo ">>> 构建完成，生成的固件："
+ls -lh bin/targets/ramips/mt76x8/ || true

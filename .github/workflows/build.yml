@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: openwrt-hc5611-custom
-          path: openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*hiwifi_hc5611*custom*.bin
+          path: openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*sysupgrade*.bin
           retention-days: 30
 
       - name: 回传构建日志
