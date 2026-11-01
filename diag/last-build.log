@@ -42,7 +42,7 @@ Checking 'file'... ok.
 Checking 'which'... ok.
 Checking 'ldconfig-stub'... ok.
 Building images for ramips - HiWiFi HC5611
-Packages: luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-package-manager-zh-cn luci-i18n-commands-zh-cn luci-lua-runtime luci-compat luci-app-commands ttyd luci-app-ttyd tcpdump iperf3 ethtool arp-scan nmap ppp ppp-mod-pppoe luci-theme-material luci-theme-openwrt base-files ca-bundle dnsmasq dropbear firewall4 fstools kernel kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7603 kmod-nft-offload kmod-usb-ohci kmod-usb2 libc libgcc libustream-mbedtls logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe swconfig uci uclient-fetch urandom-seed urngd wpad-basic-mbedtls
+Packages: luci-i18n-base-zh-cn luci-i18n-firewall-zh-cn luci-i18n-package-manager-zh-cn luci-i18n-commands-zh-cn luci uhttpd luci-lua-runtime luci-compat luci-app-commands ttyd luci-app-ttyd tcpdump iperf3 ethtool arp-scan nmap ppp ppp-mod-pppoe luci-theme-material luci-theme-openwrt base-files ca-bundle dnsmasq dropbear firewall4 fstools kernel kmod-gpio-button-hotplug kmod-leds-gpio kmod-mt7603 kmod-nft-offload kmod-usb-ohci kmod-usb2 libc libgcc libustream-mbedtls logd mtd netifd nftables odhcp6c odhcpd-ipv6only opkg ppp ppp-mod-pppoe swconfig uci uclient-fetch urandom-seed urngd wpad-basic-mbedtls
 
 Package list missing or not up-to-date, generating it.
 
@@ -186,6 +186,39 @@ Installing luci-i18n-commands-zh-cn (26.301.70438~aa4865e) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-i18n-commands-zh-cn_26.301.70438~aa4865e_all.ipk
 Installing luci-app-commands (26.301.70438~aa4865e) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-app-commands_26.301.70438~aa4865e_all.ipk
+Installing luci (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci_26.301.70438~aa4865e_all.ipk
+Installing luci-proto-ipv6 (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-proto-ipv6_26.301.70438~aa4865e_all.ipk
+Installing libiwinfo-data (2024.10.20~b94f066e-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo-data_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
+Installing libiwinfo20230701 (2024.10.20~b94f066e-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo20230701_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
+Installing rpcd-mod-iwinfo (2025.09.01~bba95191-r2) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/rpcd-mod-iwinfo_2025.09.01~bba95191-r2_mipsel_24kc.ipk
+Installing luci-mod-status (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-mod-status_26.301.70438~aa4865e_mipsel_24kc.ipk
+Installing luci-mod-system (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-mod-system_26.301.70438~aa4865e_all.ipk
+Installing luci-mod-network (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-mod-network_26.301.70438~aa4865e_all.ipk
+Installing luci-mod-admin-full (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-mod-admin-full_26.301.70438~aa4865e_all.ipk
+Installing luci-proto-ppp (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-proto-ppp_26.301.70438~aa4865e_all.ipk
+Installing luci-theme-bootstrap (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-theme-bootstrap_26.301.70438~aa4865e_all.ipk
+Installing rpcd-mod-rrdns (20170710) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/rpcd-mod-rrdns_20170710_mipsel_24kc.ipk
+Installing libjson-script20240329 (2025.07.23~49056d17-r1) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libjson-script20240329_2025.07.23~49056d17-r1_mipsel_24kc.ipk
+Installing uhttpd (2025.07.06~7e64e8ba-r5) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/uhttpd_2025.07.06~7e64e8ba-r5_mipsel_24kc.ipk
+Installing uhttpd-mod-ubus (2025.07.06~7e64e8ba-r5) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/uhttpd-mod-ubus_2025.07.06~7e64e8ba-r5_mipsel_24kc.ipk
+Installing luci-light (26.301.70438~aa4865e) to root...
+Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-light_26.301.70438~aa4865e_all.ipk
+Package uhttpd (2025.07.06~7e64e8ba-r5) installed in root is up to date.
 Installing luci-lua-runtime (26.301.70438~aa4865e) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/luci/luci-lua-runtime_26.301.70438~aa4865e_mipsel_24kc.ipk
 Installing liblua5.1.5 (5.1.5-r11) to root...
@@ -289,8 +322,6 @@ Installing fstools (2024.07.14~408c2cc4-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/fstools_2024.07.14~408c2cc4-r1_mipsel_24kc.ipk
 Installing fwtool (2019.11.12~8f7fe925-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/packages/fwtool_2019.11.12~8f7fe925-r1_mipsel_24kc.ipk
-Installing libjson-script20240329 (2025.07.23~49056d17-r1) to root...
-Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libjson-script20240329_2025.07.23~49056d17-r1_mipsel_24kc.ipk
 Installing procd (2026.03.14~c59f2d80-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/procd_2026.03.14~c59f2d80-r1_mipsel_24kc.ipk
 Installing procd-seccomp (2026.03.14~c59f2d80-r1) to root...
@@ -314,10 +345,6 @@ Installing kmod-mt7603 (6.6.144.2025.11.06~eb567bc7-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/targets/ramips/mt76x8/kmods/6.6.144-1-4ca73159125334b180ac4bba6dc45839/kmod-mt7603_6.6.144.2025.11.06~eb567bc7-r1_mipsel_24kc.ipk
 Installing iw (6.9-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/iw_6.9-r1_mipsel_24kc.ipk
-Installing libiwinfo-data (2024.10.20~b94f066e-r1) to root...
-Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo-data_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
-Installing libiwinfo20230701 (2024.10.20~b94f066e-r1) to root...
-Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/libiwinfo20230701_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
 Installing iwinfo (2024.10.20~b94f066e-r1) to root...
 Downloading https://downloads.openwrt.org/releases/24.10.8/packages/mipsel_24kc/base/iwinfo_2024.10.20~b94f066e-r1_mipsel_24kc.ipk
 Installing ucode-mod-nl80211 (2025.07.18~3f64c808-r2) to root...
@@ -499,10 +526,12 @@ Configuring kmod-nft-core.
 Configuring kmod-nft-fib.
 Configuring libubus-lua.
 Configuring swconfig.
+Configuring luci-mod-system.
 Configuring kmod-nf-flow.
 Configuring kmod-lib-crc-ccitt.
 Configuring getrandom.
 Configuring luci-theme-openwrt.
+Configuring luci-theme-bootstrap.
 Configuring kmod-slhc.
 Configuring kmod-ppp.
 Configuring kmod-pppox.
@@ -534,6 +563,8 @@ Configuring firewall4.
 Configuring kmod-usb-ohci.
 Configuring dnsmasq.
 Configuring kmod-usb-ehci.
+Configuring rpcd-mod-iwinfo.
+Configuring luci-mod-status.
 Configuring kmod-usb2.
 Configuring luci-app-firewall.
 Configuring libpcap1.
@@ -555,7 +586,10 @@ Configuring kmod-crypto-ccm.
 Configuring luci-app-package-manager.
 Configuring urandom-seed.
 Configuring luci-i18n-package-manager-zh-cn.
+Configuring luci-proto-ppp.
 Configuring ppp.
+Configuring luci-mod-network.
+Configuring luci-mod-admin-full.
 Configuring kmod-leds-gpio.
 Configuring kmod-gpio-button-hotplug.
 Configuring logd.
@@ -567,8 +601,14 @@ Configuring kmod-crypto-gcm.
 Configuring kmod-mac80211.
 Configuring kmod-mt76-core.
 Configuring kmod-mt7603.
+Configuring luci-proto-ipv6.
+Configuring uhttpd.
 Configuring ca-bundle.
 Configuring luci-i18n-base-zh-cn.
+Configuring rpcd-mod-rrdns.
+Configuring uhttpd-mod-ubus.
+Configuring luci-light.
+Configuring luci.
 Configuring iperf3.
 Configuring urngd.
 Configuring luci-i18n-firewall-zh-cn.
@@ -603,6 +643,7 @@ Enabling sysntpd
 Enabling system
 Enabling ttyd
 Enabling ucitrack
+Enabling uhttpd
 Enabling umount
 Enabling urandom_seed
 Enabling urngd
@@ -613,27 +654,27 @@ Pseudo file "dev" exists in source filesystem "/home/runner/work/besos/besos/ope
 Ignoring, exclude it (-e/-ef) to override.
 Parallel mksquashfs: Using 4 processors
 Creating 4.0 filesystem on /home/runner/work/besos/besos/openwrt-imagebuilder-24.10.8-ramips-mt76x8.Linux-x86_64/build_dir/target-mipsel_24kc_musl/linux-ramips_mt76x8/root.squashfs, block size 1048576.
-[|                                                             ]    0/1185   0%[=============================================================/] 1185/1185 100%
+[|                                                             ]    0/1325   0%[=============================================================\] 1325/1325 100%
 
 Exportable Squashfs 4.0 filesystem, xz compressed, data block size 1048576
 	compressed data, compressed metadata, compressed fragments,
 	no xattrs, compressed ids
 	duplicates are removed
-Filesystem size 8060.23 Kbytes (7.87 Mbytes)
-	22.65% of uncompressed filesystem size (35591.06 Kbytes)
-Inode table size 10374 bytes (10.13 Kbytes)
-	20.44% of uncompressed inode table size (50745 bytes)
-Directory table size 14834 bytes (14.49 Kbytes)
-	44.33% of uncompressed directory table size (33465 bytes)
-Number of duplicate files found 172
-Number of inodes 1536
-Number of files 1178
-Number of fragments 23
-Number of symbolic links 227
+Filesystem size 8207.88 Kbytes (8.02 Mbytes)
+	22.49% of uncompressed filesystem size (36502.09 Kbytes)
+Inode table size 11354 bytes (11.09 Kbytes)
+	20.34% of uncompressed inode table size (55813 bytes)
+Directory table size 16286 bytes (15.90 Kbytes)
+	43.94% of uncompressed directory table size (37065 bytes)
+Number of duplicate files found 190
+Number of inodes 1694
+Number of files 1321
+Number of fragments 24
+Number of symbolic links 232
 Number of device nodes 1
 Number of fifo nodes 0
 Number of socket nodes 0
-Number of directories 130
+Number of directories 140
 Number of hard-links 0
 Number of ids (unique uids + gids) 1
 Number of uids 1
@@ -642,17 +683,17 @@ Number of gids 1
 	unknown (0)
 3973+1 records in
 3973+1 records out
-2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00806609 s, 252 MB/s
-16120+1 records in
-16120+1 records out
-8253680 bytes (8.3 MB, 7.9 MiB) copied, 0.0337359 s, 245 MB/s
-padding image to 009d0000
+2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00749371 s, 272 MB/s
+16415+1 records in
+16415+1 records out
+8404864 bytes (8.4 MB, 8.0 MiB) copied, 0.0320025 s, 263 MB/s
+padding image to 00a00000
 
 Calculating checksums...
 >>> 构建完成，生成的固件：
-total 9.9M
--rw-r--r-- 1 runner runner 9.9M Nov  1 17:39 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
--rw-r--r-- 1 runner runner  22K Nov  1 17:39 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
--rw-r--r-- 1 runner runner 4.9K Nov  1 17:39 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
--rw-r--r-- 1 runner runner 1.2K Nov  1 17:39 profiles.json
--rw-r--r-- 1 runner runner  477 Nov  1 17:39 sha256sums
+total 11M
+-rw-r--r-- 1 runner runner  11M Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
+-rw-r--r-- 1 runner runner  23K Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
+-rw-r--r-- 1 runner runner 5.4K Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
+-rw-r--r-- 1 runner runner 1.2K Nov  1 17:51 profiles.json
+-rw-r--r-- 1 runner runner  477 Nov  1 17:51 sha256sums
