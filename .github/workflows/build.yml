@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -19,11 +21,33 @@ jobs:
             gawk git gettext unzip zstd python3 rsync
 
       - name: 构建定制固件
-        run: bash build.sh
+        id: build
+        run: |
+          bash build.sh > build.log 2>&1
+          code=$?
+          echo "exit_code=$code" >> $GITHUB_OUTPUT
+          echo "===== build.log 最后 60 行 ====="
+          tail -60 build.log
+          exit $code
 
       - name: 上传固件
+        if: steps.build.outputs.exit_code == '0'
         uses: actions/upload-artifact@v4
         with:
           name: openwrt-hc5611-custom
           path: openwrt-imagebuilder-*/bin/targets/ramips/mt76x8/*hiwifi_hc5611*custom*.bin
           retention-days: 30
+
+      - name: 回传构建日志
+        if: always()
+        run: |
+          mkdir -p diag
+          cp build.log diag/last-build.log 2>/dev/null || true
+          git config user.email "action@users.noreply.github.com"
+          git config user.name "GitHub Action"
+          git add diag/last-build.log 2>/dev/null
+          if ! git diff --cached --quiet; then
+            git commit -m "构建日志 [skip ci]"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/xiaodiudiu52/besos.git HEAD:master || \
+              echo "(日志回传失败，需在 Actions 页面手动查看)"
+          fi
