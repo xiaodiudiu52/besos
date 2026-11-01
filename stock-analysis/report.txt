@@ -1,29 +1,39 @@
-===== 顶层目录 =====
+########## 解包日志 ##########
+-rw-r--r-- 1 runner runner 8.9M Nov  1 19:06 stock.bin
+5b7dc898c8a68886470154771a2aa8ed  stock.bin
+squashfs 起始 KB = 1408
+-rw-r--r-- 1 runner runner 7.6M Nov  1 19:06 rootfs.squashfs
+===== superblock =====
+FATAL ERROR: Can't find a valid SQUASHFS superblock on rootfs.squashfs
+===== 解压 =====
+FATAL ERROR: Can't find a valid SQUASHFS superblock on rootfs.squashfs
+===== 解压结果 =====
+
+########## 目录结构 ##########
+===== 顶层 =====
 (无)
 
-===== 是否使用 LuCI =====
+===== LuCI? =====
 无 LuCI（自研 UI）
 
-===== www 目录 =====
-(无 www)
+===== www =====
+(无)
 
 ===== www 文件数 =====
 0
 
-===== www 目录树 =====
+===== www 树 =====
 
-===== JS 文件 =====
+===== JS =====
 
-===== CSS 文件 =====
-
-===== 极路由自研痕迹 =====
+===== 自研痕迹 hiwifi =====
 
 ===== etc/config =====
 
-===== init.d 服务 =====
+===== init.d =====
 
 ===== Web 服务器 =====
 
 ===== 后端语言 =====
 
-===== opkg 已装包 =====
+===== opkg 包 =====
