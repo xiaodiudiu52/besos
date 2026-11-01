@@ -660,8 +660,8 @@ Exportable Squashfs 4.0 filesystem, xz compressed, data block size 1048576
 	compressed data, compressed metadata, compressed fragments,
 	no xattrs, compressed ids
 	duplicates are removed
-Filesystem size 8207.88 Kbytes (8.02 Mbytes)
-	22.49% of uncompressed filesystem size (36502.09 Kbytes)
+Filesystem size 8208.44 Kbytes (8.02 Mbytes)
+	22.49% of uncompressed filesystem size (36503.45 Kbytes)
 Inode table size 11354 bytes (11.09 Kbytes)
 	20.34% of uncompressed inode table size (55813 bytes)
 Directory table size 16286 bytes (15.90 Kbytes)
@@ -683,17 +683,17 @@ Number of gids 1
 	unknown (0)
 3973+1 records in
 3973+1 records out
-2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00749371 s, 272 MB/s
-16415+1 records in
-16415+1 records out
-8404864 bytes (8.4 MB, 8.0 MiB) copied, 0.0320025 s, 263 MB/s
+2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00309349 s, 658 MB/s
+16416+1 records in
+16416+1 records out
+8405440 bytes (8.4 MB, 8.0 MiB) copied, 0.0131543 s, 639 MB/s
 padding image to 00a00000
 
 Calculating checksums...
 >>> 构建完成，生成的固件：
 total 11M
--rw-r--r-- 1 runner runner  11M Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
--rw-r--r-- 1 runner runner  23K Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
--rw-r--r-- 1 runner runner 5.4K Nov  1 17:51 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
--rw-r--r-- 1 runner runner 1.2K Nov  1 17:51 profiles.json
--rw-r--r-- 1 runner runner  477 Nov  1 17:51 sha256sums
+-rw-r--r-- 1 runner runner  11M Nov  1 18:41 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
+-rw-r--r-- 1 runner runner  23K Nov  1 18:41 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
+-rw-r--r-- 1 runner runner 5.4K Nov  1 18:41 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
+-rw-r--r-- 1 runner runner 1.2K Nov  1 18:41 profiles.json
+-rw-r--r-- 1 runner runner  477 Nov  1 18:41 sha256sums
