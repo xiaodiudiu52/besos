@@ -40,7 +40,8 @@ fi
 echo ">>> 给注入的脚本加执行权限"
 chmod +x "${FILES}"/usr/bin/gomode "${FILES}"/usr/bin/gomode-led \
 	"${FILES}"/etc/init.d/gomode "${FILES}"/etc/init.d/gomode-led \
-	"${FILES}"/etc/uci-defaults/99-hc5611-custom
+	"${FILES}"/etc/uci-defaults/99-hc5611-custom \
+	"${FILES}"/www/cgi-bin/api
 
 echo ">>> 开始构建（约 5-15 分钟）"
 cd "${IB}"

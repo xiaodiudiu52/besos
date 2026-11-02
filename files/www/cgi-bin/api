@@ -1,0 +1,186 @@
+#!/bin/sh
+# 极GO 管理界面 —— 后端接口
+#
+# 查询状态： GET  /cgi-bin/api?action=status
+# 执行操作： POST /cgi-bin/api   正文是 JSON
+#
+# action 取值：
+#   status   查询当前状态（JSON）
+#   setmode  切换上网方式（mode=auto|dhcp|static|pppoe|bridge|none）
+#   setwifi  改 WiFi 名称/密码
+#   setlan   改管理地址
+#   reboot   重启设备
+#
+# 注意：切换动作会重启网络，所以一律放后台执行并立刻返回，
+#       前端靠轮询 status 看结果，这样网络抖动不会导致请求卡死。
+
+printf 'Content-Type: application/json\r\n'
+printf 'Cache-Control: no-cache\r\n'
+printf '\r\n'
+
+# ---------- 工具 ----------
+
+# 读 POST 正文（原样保留，utf-8 中文不会丢）
+BODY=""
+if [ -n "$CONTENT_LENGTH" ] && [ "$CONTENT_LENGTH" -gt 0 ] 2>/dev/null; then
+	BODY=$(dd bs=1 count="$CONTENT_LENGTH" 2>/dev/null)
+fi
+
+# 从 JSON 里取字符串字段值
+jget() {
+	printf '%s' "$BODY" | sed -n "s/.*\"$1\"[[:space:]]*:[[:space:]]*\"\([^\"]*\)\".*/\1/p" | head -1
+}
+
+# 去掉会破坏 JSON 的字符
+clean() { printf '%s' "$1" | tr -d '"\\'; }
+jstr()  { printf '"%s"' "$(clean "$1")"; }
+
+ACTION=$(jget action)
+[ -z "$ACTION" ] && ACTION=$(printf '%s' "$QUERY_STRING" | sed -n 's/.*action=\([^&]*\).*/\1/p')
+[ -z "$ACTION" ] && ACTION=status
+
+g() { uci -q get "gomode.main.$1" 2>/dev/null; }
+
+# ---------- 登录（默认密码 admin，可在设置里改） ----------
+
+do_login() {
+	p=$(jget password)
+	ap=$(g admin_pass)
+	[ -z "$ap" ] && ap=admin
+	if [ "$p" = "$ap" ]; then
+		printf '{"ok":1}'
+	else
+		printf '{"ok":0,"msg":"管理密码不对"}'
+	fi
+}
+
+do_setpass() {
+	old=$(jget oldpass)
+	np=$(jget newpass)
+	ap=$(g admin_pass)
+	[ -z "$ap" ] && ap=admin
+	if [ "$old" != "$ap" ]; then printf '{"ok":0,"msg":"原密码不对"}'; return; fi
+	if [ -z "$np" ]; then printf '{"ok":0,"msg":"新密码不能为空"}'; return; fi
+	uci set gomode.main.admin_pass="$np"
+	uci commit gomode
+	printf '{"ok":1}'
+}
+
+# ---------- 状态查询 ----------
+
+do_status() {
+	cur=$(g current);       [ -z "$cur" ]  && cur=none
+	mode=$(g mode);         [ -z "$mode" ] && mode=auto
+	ssid=$(g ap_ssid);      [ -z "$ssid" ] && ssid=Go
+	key=$(g ap_key)
+	lan=$(g lan_ip);        [ -z "$lan" ]  && lan=10.10.10.1
+	up_ssid=$(g up_ssid)
+	pu=$(g pppoe_user)
+	sip=$(g ipaddr); sgw=$(g gateway)
+
+	# 联网检测（内网不通就别等太久）
+	if ping -c 1 -W 2 223.5.5.5 >/dev/null 2>&1; then net=1; else net=0; fi
+
+	# LED
+	gb=$(cat /sys/class/leds/green:system/brightness 2>/dev/null); [ -z "$gb" ] && gb=0
+	rb=$(cat /sys/class/leds/red:internet/brightness   2>/dev/null); [ -z "$rb" ] && rb=0
+
+	# 运行时长
+	up=$(awk '{printf "%d", $1/60}' /proc/uptime 2>/dev/null)
+
+	# 已连接设备（DHCP 租约里有主机名，比 ARP 好用）
+	devs=""
+	if [ -f /tmp/dhcp.leases ]; then
+		while read -r _ts mac ip name _x; do
+			[ -z "$ip" ] && continue
+			n=$(clean "$name"); [ -z "$n" ] && n="$mac"
+			[ -n "$devs" ] && devs="$devs,"
+			devs="$devs{\"name\":\"$n\",\"ip\":\"$ip\",\"mac\":\"$mac\"}"
+		done < /tmp/dhcp.leases
+	fi
+
+	printf '{'
+	printf '"current":%s' "$(jstr "$cur")"
+	printf ',"mode":%s'     "$(jstr "$mode")"
+	printf ',"internet":%s' "$net"
+	printf ',"ssid":%s'     "$(jstr "$ssid")"
+	printf ',"key":%s'      "$(jstr "$key")"
+	printf ',"lan_ip":%s'   "$(jstr "$lan")"
+	printf ',"up_ssid":%s'  "$(jstr "$up_ssid")"
+	printf ',"pppoe_user":%s' "$(jstr "$pu")"
+	printf ',"ipaddr":%s'   "$(jstr "$sip")"
+	printf ',"gateway":%s'  "$(jstr "$sgw")"
+	printf ',"uptime_min":%s' "${up:-0}"
+	printf ',"led":{"green":%s,"red":%s}' "$gb" "$rb"
+	printf ',"devices":[%s]' "$devs"
+	printf '}\n'
+}
+
+# ---------- 切换上网方式 ----------
+
+do_setmode() {
+	m=$(jget mode)
+	case "$m" in
+		auto|dhcp|static|pppoe|bridge|none) ;;
+		*) printf '{"ok":0,"msg":"未知的上网方式"}'; return ;;
+	esac
+
+	s=$(jget ssid);   k=$(jget key)      # 桥接 / 中继用的上级 WiFi
+	u=$(jget user);   p=$(jget pass)     # PPPoE 账号
+	ip=$(jget ipaddr); nm=$(jget netmask); gw=$(jget gateway)
+	d1=$(jget dns1);  d2=$(jget dns2)
+
+	[ -n "$s" ]  && uci set gomode.main.up_ssid="$s"
+	[ -n "$k" ]  && uci set gomode.main.up_key="$k"
+	[ -n "$u" ]  && uci set gomode.main.pppoe_user="$u"
+	[ -n "$p" ]  && uci set gomode.main.pppoe_pass="$p"
+	[ -n "$ip" ] && uci set gomode.main.ipaddr="$ip"
+	[ -n "$nm" ] && uci set gomode.main.netmask="$nm"
+	[ -n "$gw" ] && uci set gomode.main.gateway="$gw"
+	[ -n "$d1" ] && uci set gomode.main.dns1="$d1"
+	[ -n "$d2" ] && uci set gomode.main.dns2="$d2"
+
+	uci set gomode.main.mode="$m"
+	uci commit gomode
+
+	# 后台执行：网络会重启，不能让请求等着
+	nohup sh -c "/usr/bin/gomode $m > /tmp/gomode_last.log 2>&1" >/dev/null 2>&1 &
+	printf '{"ok":1}'
+}
+
+# ---------- 改 WiFi ----------
+
+do_setwifi() {
+	s=$(jget ssid)
+	k=$(jget key)
+	lan=$(jget lan_ip)
+	if [ -z "$s" ]; then printf '{"ok":0,"msg":"WiFi 名称不能为空"}'; return; fi
+
+	uci set gomode.main.ap_ssid="$s"
+	uci set gomode.main.ap_key="$k"
+	[ -n "$lan" ] && uci set gomode.main.lan_ip="$lan"
+	uci commit gomode
+
+	nohup sh -c "/usr/bin/gomode apply > /tmp/gomode_last.log 2>&1" >/dev/null 2>&1 &
+	printf '{"ok":1}'
+}
+
+# ---------- 重启 ----------
+
+do_reboot() {
+	nohup sh -c 'sleep 2; reboot' >/dev/null 2>&1 &
+	printf '{"ok":1}'
+}
+
+# ---------- 入口 ----------
+
+case "$ACTION" in
+	login)   do_login ;;
+	setpass) do_setpass ;;
+	status)  do_status ;;
+	setmode) do_setmode ;;
+	setwifi) do_setwifi ;;
+	setlan)  do_setwifi ;;
+	reboot)  do_reboot ;;
+	*)       printf '{"ok":0,"msg":"不支持的操作"}' ;;
+esac

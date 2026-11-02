@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>极GO 路由器</title>
+<style>
+:root{
+  --bg1:#1c3f63; --bg2:#0b1a2c;
+  --card:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.14);
+  --text:#eaf2fa; --dim:#9db4ca;
+  --blue:#4fc3f7; --green:#4caf50; --amber:#ffb300; --red:#ef5350;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--text);min-height:100vh;
+  background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%);
+  background-attachment:fixed;
+}
+button{font-family:inherit;cursor:pointer;border:0}
+input{font-family:inherit}
+
+/* ---------- 登录页 ---------- */
+#loginPage{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:linear-gradient(160deg,#5aa9e6 0%,#2a6fb0 45%,#123a63 100%);
+}
+.login-card{
+  width:100%;max-width:360px;background:#fff;border-radius:18px;
+  padding:38px 30px 26px;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.35);
+}
+.login-card .logo{font-size:34px;font-weight:700;color:#1a5f9e;letter-spacing:1px}
+.login-card .logo em{font-style:normal;color:#37b0e8}
+.login-card .sub{color:#7b8a99;font-size:13px;margin:6px 0 26px}
+.login-card input{
+  width:100%;padding:13px 14px;font-size:15px;border:1px solid #d6dee6;
+  border-radius:10px;outline:none;text-align:center;letter-spacing:2px;
+}
+.login-card input:focus{border-color:#37b0e8}
+.login-card button{
+  width:100%;margin-top:14px;padding:13px;font-size:16px;color:#fff;border-radius:10px;
+  background:linear-gradient(90deg,#3aa8e0,#1a6fb5);font-weight:600;
+}
+.login-card button:active{opacity:.85}
+.login-card .tip{color:#a3b0bd;font-size:12px;margin-top:16px}
+.login-card .err{color:var(--red);font-size:13px;margin-top:12px;min-height:18px}
+
+/* ---------- 主界面 ---------- */
+#mainPage{display:none;max-width:900px;margin:0 auto;padding:16px 14px 40px}
+header{
+  display:flex;align-items:center;gap:10px;padding:14px 4px 18px;
+}
+header .logo{font-size:20px;font-weight:700;letter-spacing:.5px}
+header .logo em{font-style:normal;color:var(--blue)}
+header .spacer{flex:1}
+header .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+header .net{font-size:13px;color:var(--dim)}
+header button{color:var(--dim);background:transparent;font-size:13px;padding:6px 8px}
+
+/* 状态大卡 */
+.status{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:22px 20px;display:flex;align-items:center;gap:18px;margin-bottom:14px;
+}
+.status .icon{
+  width:58px;height:58px;border-radius:15px;flex:none;
+  background:rgba(79,195,247,.16);display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+}
+.status .txt h2{margin:0 0 5px;font-size:19px;font-weight:600}
+.status .txt p{margin:0;font-size:13px;color:var(--dim);line-height:1.6}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:18px;margin-bottom:14px;
+}
+.card h3{margin:0 0 14px;font-size:15px;font-weight:600;color:var(--text)}
+.card h3 span{float:right;font-size:12px;color:var(--dim);font-weight:400}
+
+/* 模式网格 */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.grid button{
+  padding:13px 6px;font-size:13px;border-radius:11px;color:var(--text);
+  background:rgba(255,255,255,.06);border:1px solid var(--line);transition:.15s;
+}
+.grid button.on{
+  background:linear-gradient(135deg,#2f9fd6,#1a6fb5);border-color:#4fc3f7;
+  color:#fff;font-weight:600;
+}
+.grid button:active{transform:scale(.97)}
+
+/* 参数区 */
+.params{margin-top:14px;display:none}
+.params.show{display:block}
+.fld{margin-bottom:10px}
+.fld label{display:block;font-size:12px;color:var(--dim);margin-bottom:5px}
+.fld input{
+  width:100%;padding:10px 12px;font-size:14px;border-radius:9px;
+  border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);outline:none;
+}
+.fld input:focus{border-color:var(--blue)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.btn-main{
+  width:100%;margin-top:14px;padding:12px;border-radius:10px;color:#fff;font-size:15px;
+  background:linear-gradient(90deg,#3aa8e0,#1a6fb5);font-weight:600;
+}
+.btn-main:disabled{opacity:.5}
+.btn-ghost{
+  width:100%;margin-top:9px;padding:11px;border-radius:10px;font-size:14px;
+  background:transparent;border:1px solid var(--line);color:var(--dim);
+}
+
+/* 设备列表 */
+.dev{
+  display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);
+}
+.dev:last-child{border-bottom:0}
+.dev .n{font-size:14px}
+.dev .i{font-size:12px;color:var(--dim);margin-left:auto;text-align:right}
+.empty{color:var(--dim);font-size:13px;padding:6px 0}
+
+/* 提示条 */
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
+  background:rgba(0,0,0,.82);color:#fff;padding:11px 20px;border-radius:22px;
+  font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:99;
+}
+.toast.show{opacity:1}
+
+@media(max-width:520px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .status{padding:18px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 登录页 ========== -->
+<div id="loginPage">
+  <div class="login-card">
+    <div class="logo">极<em>GO</em></div>
+    <div class="sub">路由器管理系统</div>
+    <input type="password" id="pwd" placeholder="管理密码" autocomplete="off">
+    <button onclick="doLogin()">登 录</button>
+    <div class="err" id="loginErr"></div>
+    <div class="tip">默认密码 admin</div>
+  </div>
+</div>
+
+<!-- ========== 主界面 ========== -->
+<div id="mainPage">
+  <header>
+    <div class="logo">极<em>GO</em></div>
+    <div class="spacer"></div>
+    <div class="net"><span class="dot" id="netDot"></span><span id="netTxt">检测中…</span></div>
+    <button onclick="logout()">退出</button>
+  </header>
+
+  <!-- 状态 -->
+  <div class="status">
+    <div class="icon" id="modeIcon">📶</div>
+    <div class="txt">
+      <h2 id="modeName">加载中…</h2>
+      <p id="modeDesc">正在读取设备状态</p>
+    </div>
+  </div>
+
+  <!-- 上网方式 -->
+  <div class="card">
+    <h3>上网方式<span id="curMode"></span></h3>
+    <div class="grid">
+      <button data-m="auto">自动探测</button>
+      <button data-m="dhcp">自动获取</button>
+      <button data-m="static">静态 IP</button>
+      <button data-m="pppoe">宽带拨号</button>
+      <button data-m="bridge">无线桥接</button>
+      <button data-m="none">独立热点</button>
+    </div>
+
+    <div class="params" id="params">
+      <div id="pBridge" style="display:none">
+        <div class="fld"><label>上级 WiFi 名称</label><input id="up_ssid" placeholder="例如 IOT"></div>
+        <div class="fld"><label>上级 WiFi 密码</label><input id="up_key" type="password" placeholder="留空表示无密码"></div>
+      </div>
+      <div id="pPppoe" style="display:none">
+        <div class="row2">
+          <div class="fld"><label>宽带账号</label><input id="user"></div>
+          <div class="fld"><label>宽带密码</label><input id="pass" type="password"></div>
+        </div>
+      </div>
+      <div id="pStatic" style="display:none">
+        <div class="row2">
+          <div class="fld"><label>IP 地址</label><input id="ipaddr"></div>
+          <div class="fld"><label>子网掩码</label><input id="netmask" value="255.255.255.0"></div>
+        </div>
+        <div class="row2">
+          <div class="fld"><label>网关</label><input id="gateway"></div>
+          <div class="fld"><label>DNS</label><input id="dns1" value="223.5.5.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-main" id="applyBtn" onclick="applyMode()">应用设置</button>
+  </div>
+
+  <!-- WiFi -->
+  <div class="card">
+    <h3>无线网络<span>本机发射</span></h3>
+    <div class="row2">
+      <div class="fld"><label>WiFi 名称</label><input id="ssid" value="Go"></div>
+      <div class="fld"><label>WiFi 密码</label><input id="key" placeholder="留空 = 不加密"></div>
+    </div>
+    <div class="fld"><label>管理地址</label><input id="lan_ip" value="10.10.10.1"></div>
+    <button class="btn-main" onclick="saveWifi()">保存并生效</button>
+  </div>
+
+  <!-- 设备 -->
+  <div class="card">
+    <h3>已连接设备<span id="devCount"></span></h3>
+    <div id="devList"><div class="empty">读取中…</div></div>
+  </div>
+
+  <!-- 系统 -->
+  <div class="card">
+    <h3>系统<span id="uptime"></span></h3>
+    <button class="btn-ghost" onclick="reboot()">重启设备</button>
+    <button class="btn-ghost" onclick="location.href='/cgi-bin/luci/'">高级设置（LuCI）</button>
+    <button class="btn-ghost" onclick="location.href='/cgi-bin/api?action=status'">查看状态 JSON（排障用）</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var API='/cgi-bin/api';
+var cur='none', pick='none', busy=false;
+
+var MODES={
+  auto:  {name:'自动探测', icon:'🔍', desc:'开机自动判断网口该做 WAN 还是 LAN'},
+  dhcp:  {name:'自动获取 IP', icon:'🌐', desc:'网口接上级网络，自动获取地址上网'},
+  static:{name:'静态 IP', icon:'📌', desc:'上级网络没有 DHCP，手动指定地址'},
+  pppoe: {name:'宽带拨号', icon:'📞', desc:'网口接光猫，用宽带账号拨号'},
+  bridge:{name:'无线桥接', icon:'📡', desc:'无线连上级 WiFi，网口保持 LAN 可管理'},
+  none:  {name:'独立热点', icon:'📶', desc:'不联网，本机发射 WiFi 并分配地址'}
+};
+
+function $(id){return document.getElementById(id);}
+function toast(msg){
+  var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2600);
+}
+function post(data){
+  return fetch(API,{method:'POST',body:JSON.stringify(data)}).then(function(r){return r.json();});
+}
+
+/* ---- 登录 ---- */
+function doLogin(){
+  post({action:'login',password:$('pwd').value}).then(function(j){
+    if(j.ok){ sessionStorage.setItem('goAuth', $('pwd').value);
+      $('loginPage').style.display='none'; $('mainPage').style.display='block';
+      load(); setInterval(load,8000);
+    } else { $('loginErr').textContent=j.msg||'登录失败'; }
+  });
+}
+function logout(){ sessionStorage.removeItem('goAuth'); location.reload(); }
+$('pwd').addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
+
+/* ---- 模式选择 ---- */
+document.querySelectorAll('.grid button').forEach(function(b){
+  b.onclick=function(){
+    pick=b.dataset.m;
+    document.querySelectorAll('.grid button').forEach(function(x){x.classList.toggle('on',x===b);});
+    var p=$('params');
+    ['pBridge','pPppoe','pStatic'].forEach(function(id){$(id).style.display='none';});
+    p.classList.remove('show');
+    if(pick==='bridge'){ $('pBridge').style.display='block'; p.classList.add('show'); }
+    if(pick==='pppoe'){ $('pPppoe').style.display='block'; p.classList.add('show'); }
+    if(pick==='static'){ $('pStatic').style.display='block'; p.classList.add('show'); }
+  };
+});
+
+function applyMode(){
+  if(busy) return;
+  var d={action:'setmode',mode:pick};
+  if(pick==='bridge'){
+    d.ssid=$('up_ssid').value; d.key=$('up_key').value;
+    if(!d.ssid){ toast('请填上级 WiFi 名称'); return; }
+  }
+  if(pick==='pppoe'){ d.user=$('user').value; d.pass=$('pass').value; }
+  if(pick==='static'){
+    d.ipaddr=$('ipaddr').value; d.netmask=$('netmask').value;
+    d.gateway=$('gateway').value; d.dns1=$('dns1').value;
+  }
+  busy=true; $('applyBtn').disabled=true; $('applyBtn').textContent='切换中…';
+  toast('正在切换，网络会短暂中断');
+  post(d).then(function(){
+    setTimeout(function(){
+      busy=false; $('applyBtn').disabled=false; $('applyBtn').textContent='应用设置';
+      load(); toast('切换完成');
+    },9000);
+  });
+}
+
+function saveWifi(){
+  if(!$('ssid').value){ toast('WiFi 名称不能为空'); return; }
+  post({action:'setwifi',ssid:$('ssid').value,key:$('key').value,lan_ip:$('lan_ip').value})
+    .then(function(){ toast('已保存，WiFi 会重启'); setTimeout(load,7000); });
+}
+function reboot(){ post({action:'reboot'}); toast('设备正在重启…'); }
+
+/* ---- 状态 ---- */
+function load(){
+  fetch(API+'?action=status').then(function(r){return r.json();}).then(function(s){
+    cur=s.current;
+    var m=MODES[cur]||{name:cur,icon:'❓',desc:''};
+    $('modeIcon').textContent=m.icon;
+    $('modeName').textContent=m.name;
+    $('modeDesc').textContent=m.desc + ' · LED ' + ledDesc(s);
+    $('curMode').textContent='当前：'+m.name;
+
+    // 联网指示
+    var on=s.internet===1;
+    $('netDot').style.background=on?'var(--green)':(cur==='none'?'var(--red)':'var(--amber)');
+    $('netTxt').textContent=on?'已联网':(cur==='none'?'未联网':'联网中…');
+
+    // 表单回填
+    if(document.activeElement!==$('ssid')) $('ssid').value=s.ssid||'';
+    if(document.activeElement!==$('key'))  $('key').value=s.key||'';
+    if(document.activeElement!==$('lan_ip')) $('lan_ip').value=s.lan_ip||'';
+    if(!$('up_ssid').value) $('up_ssid').value=s.up_ssid||'';
+    if(!$('user').value)    $('user').value=s.pppoe_user||'';
+    if(!$('ipaddr').value)  $('ipaddr').value=s.ipaddr||'';
+    if(!$('gateway').value) $('gateway').value=s.gateway||'';
+    $('uptime').textContent='已运行 '+s.uptime_min+' 分钟';
+
+    // 高亮当前模式
+    document.querySelectorAll('.grid button').forEach(function(x){
+      x.classList.toggle('on', x.dataset.m===cur);
+    });
+
+    // 设备
+    var n=(s.devices||[]).length;
+    $('devCount').textContent=n?n+' 台':'';
+    if(!n){ $('devList').innerHTML='<div class="empty">暂无设备连接</div>'; }
+    else{
+      $('devList').innerHTML=s.devices.map(function(d){
+        return '<div class="dev"><span>💻</span><div><div class="n">'+esc(d.name)+
+               '</div></div><div class="i">'+esc(d.ip)+'<br>'+esc(d.mac)+'</div></div>';
+      }).join('');
+    }
+  }).catch(function(){ /* 网络重启期间忽略 */ });
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function ledDesc(s){
+  if(s.current==='none') return '红灯常亮';
+  if(s.internet===1)     return '绿灯常亮';
+  return '绿灯慢闪（正在联网）';
+}
+if(sessionStorage.getItem('goAuth')!==null){
+  $('loginPage').style.display='none'; $('mainPage').style.display='block';
+  load(); setInterval(load,8000);
+}
+</script>
+</body>
+</html>
