@@ -123,8 +123,9 @@ apply_all() {
 	wifi reload
 
 	# ③ 网口该属于 LAN 时，强制挂回桥
-	#    （实测发现 network restart 偶尔不会把 eth0 真正挂进 br-lan）
+	#    （实测：开机时 eth0 常是 down 的，不先 up 的话挂桥不会真正生效）
 	if [ "${ETH_IN_LAN:-1}" = "1" ]; then
+		ip link set eth0 up 2>/dev/null
 		ip link set eth0 master br-lan 2>/dev/null
 	fi
 
@@ -138,6 +139,7 @@ apply_all() {
 		/etc/init.d/network restart
 		/etc/init.d/firewall restart
 		wifi reload
+		ip link set eth0 up 2>/dev/null
 		ip link set eth0 master br-lan 2>/dev/null
 		return 1
 	fi

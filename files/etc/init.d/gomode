@@ -11,4 +11,21 @@ start() {
 	sleep 8
 
 	/usr/bin/gomode auto
+
+	# 补偿：开机那一刻 eth0 可能还是 down 的（netifd 就不会把它加进 br-lan），
+	# 所以等网口真正就绪后再确认一次，确保有线永远可用
+	(
+		i=0
+		while [ $i -lt 20 ]; do
+			ip link show eth0 >/dev/null 2>&1 && break
+			i=$((i+1))
+			sleep 2
+		done
+		sleep 2
+		# 只在网口属于 LAN 时挂桥（存在 wan 接口说明网口是 WAN，不能挂）
+		if ! uci -q get network.wan >/dev/null 2>&1; then
+			ip link set eth0 up 2>/dev/null
+			ip link set eth0 master br-lan 2>/dev/null
+		fi
+	) &
 }
