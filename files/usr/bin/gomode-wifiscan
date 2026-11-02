@@ -7,13 +7,27 @@
 
 rm -f /tmp/wifi_scan_done /tmp/wifi_scan_list 2>/dev/null
 
-# 扫描期间 WiFi 会短暂中断（芯片要离信道去听别人），这是正常的
-iwinfo phy0 scan 2>/dev/null > /tmp/wifi_scan_raw
+# 扫描期间 WiFi 会短暂中断（芯片要离开当前信道去听别人），这是正常的。
+# 但如果 WiFi 正在启动或刚切换完，芯片会直接回 "Scanning not possible"，
+# 这种就等几秒重试，别让用户最后只看到一个空列表。
+n=0
+while [ $n -lt 5 ]; do
+	iwinfo phy0 scan 2>/dev/null > /tmp/wifi_scan_raw
+	if [ -s /tmp/wifi_scan_raw ] && ! grep -q "not possible" /tmp/wifi_scan_raw; then
+		break
+	fi
+	n=$((n + 1))
+	sleep 4
+done
 
+# 排序说明：busybox 的 sort 排负数不可靠（-k2 -rn 会把 -88 排到 -67 前面，
+# 结果最强的网络反而没显示在最上面）。所以先把信号取绝对值当排序键
+#（-67 -> 67），按它升序排，最强的自然在最前，排完再用 cut 去掉这一列，
+# 恢复成  名称|信号|加密  的格式。
 awk '
 /^Cell/ {
-	if (e != "" && e != "unknown") print e "|" s "|" n
-	e = ""; s = ""; n = ""
+	if (e != "" && e != "unknown") print a "|" e "|" s "|" n
+	e = ""; s = ""; n = ""; a = 0
 }
 /ESSID:/ {
 	e = $2
@@ -21,14 +35,15 @@ awk '
 }
 /Signal:/ {
 	s = $2
+	a = -s
 }
 /Encryption:/ {
 	sub(/^[^:]*: /, "")
 	if (n == "") n = $0
 }
 END {
-	if (e != "" && e != "unknown") print e "|" s "|" n
+	if (e != "" && e != "unknown") print a "|" e "|" s "|" n
 }
-' /tmp/wifi_scan_raw | sort -t'|' -k2 -rn | awk -F'|' '!seen[$1]++' > /tmp/wifi_scan_list
+' /tmp/wifi_scan_raw | sort -t'|' -k1,1 -n | awk -F'|' '!seen[$2]++' | cut -d'|' -f2- > /tmp/wifi_scan_list
 
 touch /tmp/wifi_scan_done

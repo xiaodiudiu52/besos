@@ -345,6 +345,7 @@ function pollScan(){
     if(n>25){ clearInterval(t); $('scanList').innerHTML='<div class="empty">扫描超时，请重试</div>'; return; }
     fetch(API+'?action=scan_result').then(function(r){return r.json();}).then(function(j){
       if(j.ok){ clearInterval(t); renderScan(j.list); }
+      else if(j.msg){ clearInterval(t); $('scanList').innerHTML='<div class="empty">'+esc(j.msg)+'</div>'; }
     }).catch(function(){});
   },1500);
 }

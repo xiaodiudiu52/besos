@@ -53,6 +53,11 @@ do_scan() {
 do_scan_result() {
 	# 还没扫完
 	if [ ! -f /tmp/wifi_scan_done ]; then printf '{"ok":0,"busy":1}'; return; fi
+	# 重试多次仍然扫不了（WiFi 正忙）
+	if grep -q "not possible" /tmp/wifi_scan_raw 2>/dev/null; then
+		printf '{"ok":0,"msg":"WiFi 正忙，请稍等几秒再点一次"}'
+		return
+	fi
 
 	printf '{"ok":1,"list":['
 	first=1
