@@ -44,7 +44,9 @@ g() { uci -q get "gomode.main.$1" 2>/dev/null; }
 # ---------- 扫描附近 WiFi（异步：先启动，再轮询结果） ----------
 
 do_scan() {
-	nohup /usr/bin/gomode-wifiscan >/dev/null 2>&1 &
+	# 必须用 setsid 脱离进程组：uhttpd 在 CGI 请求结束时会回收整个进程组，
+	# 用 nohup 起的后台扫描会被一起杀掉（实测 /tmp 里一个文件都不生成）
+	setsid /usr/bin/gomode-wifiscan >/dev/null 2>&1 &
 	printf '{"ok":1,"started":1}'
 }
 
