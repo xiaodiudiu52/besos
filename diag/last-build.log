@@ -660,10 +660,10 @@ Exportable Squashfs 4.0 filesystem, xz compressed, data block size 1048576
 	compressed data, compressed metadata, compressed fragments,
 	no xattrs, compressed ids
 	duplicates are removed
-Filesystem size 8208.44 Kbytes (8.02 Mbytes)
-	22.49% of uncompressed filesystem size (36503.45 Kbytes)
-Inode table size 11354 bytes (11.09 Kbytes)
-	20.34% of uncompressed inode table size (55813 bytes)
+Filesystem size 8208.56 Kbytes (8.02 Mbytes)
+	22.49% of uncompressed filesystem size (36504.05 Kbytes)
+Inode table size 11358 bytes (11.09 Kbytes)
+	20.35% of uncompressed inode table size (55813 bytes)
 Directory table size 16286 bytes (15.90 Kbytes)
 	43.94% of uncompressed directory table size (37065 bytes)
 Number of duplicate files found 190
@@ -683,17 +683,17 @@ Number of gids 1
 	unknown (0)
 3973+1 records in
 3973+1 records out
-2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00969616 s, 210 MB/s
-16416+1 records in
-16416+1 records out
-8405440 bytes (8.4 MB, 8.0 MiB) copied, 0.0405951 s, 207 MB/s
+2034605 bytes (2.0 MB, 1.9 MiB) copied, 0.00803655 s, 253 MB/s
+16417+1 records in
+16417+1 records out
+8405568 bytes (8.4 MB, 8.0 MiB) copied, 0.0340286 s, 247 MB/s
 padding image to 00a00000
 
 Calculating checksums...
 >>> 构建完成，生成的固件：
 total 11M
--rw-r--r-- 1 runner runner  11M Nov  1 19:01 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
--rw-r--r-- 1 runner runner  23K Nov  1 19:01 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
--rw-r--r-- 1 runner runner 5.4K Nov  1 19:01 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
--rw-r--r-- 1 runner runner 1.2K Nov  1 19:01 profiles.json
--rw-r--r-- 1 runner runner  477 Nov  1 19:01 sha256sums
+-rw-r--r-- 1 runner runner  11M Nov  2 01:58 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611-squashfs-sysupgrade.bin
+-rw-r--r-- 1 runner runner  23K Nov  2 01:58 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.bom.cdx.json
+-rw-r--r-- 1 runner runner 5.4K Nov  2 01:58 openwrt-24.10.8-custom-ramips-mt76x8-hiwifi_hc5611.manifest
+-rw-r--r-- 1 runner runner 1.2K Nov  2 01:58 profiles.json
+-rw-r--r-- 1 runner runner  477 Nov  2 01:58 sha256sums
