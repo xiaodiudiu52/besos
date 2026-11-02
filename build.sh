@@ -39,6 +39,7 @@ fi
 
 echo ">>> 给注入的脚本加执行权限"
 chmod +x "${FILES}"/usr/bin/gomode "${FILES}"/usr/bin/gomode-led \
+	"${FILES}"/usr/bin/gomode-wifiscan \
 	"${FILES}"/etc/init.d/gomode "${FILES}"/etc/init.d/gomode-led \
 	"${FILES}"/etc/uci-defaults/99-hc5611-custom \
 	"${FILES}"/www/cgi-bin/api

@@ -41,6 +41,32 @@ ACTION=$(jget action)
 
 g() { uci -q get "gomode.main.$1" 2>/dev/null; }
 
+# ---------- 扫描附近 WiFi（异步：先启动，再轮询结果） ----------
+
+do_scan() {
+	nohup /usr/bin/gomode-wifiscan >/dev/null 2>&1 &
+	printf '{"ok":1,"started":1}'
+}
+
+do_scan_result() {
+	# 还没扫完
+	if [ ! -f /tmp/wifi_scan_done ]; then printf '{"ok":0,"busy":1}'; return; fi
+
+	printf '{"ok":1,"list":['
+	first=1
+	while IFS='|' read -r ssid sig enc; do
+		[ -z "$ssid" ] && continue
+		if [ -n "$first" ]; then first=; else printf ','; fi
+		case "$enc" in
+			*[Nn]one*) open=1 ;;
+			*) open=0 ;;
+		esac
+		printf '{"ssid":%s,"signal":%s,"enc":%s,"open":%s}' \
+			"$(jstr "$ssid")" "${sig:-0}" "$(jstr "$enc")" "$open"
+	done < /tmp/wifi_scan_list
+	printf ']}\n'
+}
+
 # ---------- 登录（默认密码 admin，可在设置里改） ----------
 
 do_login() {
@@ -175,6 +201,8 @@ do_reboot() {
 # ---------- 入口 ----------
 
 case "$ACTION" in
+	scan)        do_scan ;;
+	scan_result) do_scan_result ;;
 	login)   do_login ;;
 	setpass) do_setpass ;;
 	status)  do_status ;;

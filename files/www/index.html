@@ -130,6 +130,22 @@ header button{color:var(--dim);background:transparent;font-size:13px;padding:6px
 }
 .toast.show{opacity:1}
 
+/* 扫描选 WiFi */
+.ssid-row{display:flex;gap:8px}
+.ssid-row input{flex:1}
+.btn-scan{padding:0 15px;border-radius:9px;background:rgba(79,195,247,.16);color:var(--blue);border:1px solid rgba(79,195,247,.45);font-size:13px;white-space:nowrap}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.mask.show{display:flex}
+.sheet{width:100%;max-width:520px;background:#16324f;border-radius:16px 16px 0 0;padding:16px 16px 22px;max-height:72vh;overflow:auto}
+.sheet-h{font-size:15px;font-weight:600;margin-bottom:10px}
+.sheet-h span{float:right;color:var(--blue);font-weight:400;font-size:13px;cursor:pointer}
+.wifi-item{display:flex;align-items:center;gap:11px;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.wifi-item:active{background:rgba(255,255,255,.07)}
+.wifi-item .nm{flex:1;font-size:14px;word-break:break-all}
+.wifi-item .lk{font-size:11px;color:var(--dim)}
+.sig{font-size:13px;letter-spacing:1px}
+.s1{color:#4caf50}.s2{color:#ffb300}.s3{color:#78909c}
+
 @media(max-width:520px){
   .grid{grid-template-columns:repeat(2,1fr)}
   .status{padding:18px 16px}
@@ -182,7 +198,12 @@ header button{color:var(--dim);background:transparent;font-size:13px;padding:6px
 
     <div class="params" id="params">
       <div id="pBridge" style="display:none">
-        <div class="fld"><label>上级 WiFi 名称</label><input id="up_ssid" placeholder="例如 IOT"></div>
+        <div class="fld"><label>上级 WiFi 名称</label>
+          <div class="ssid-row">
+            <input id="up_ssid" placeholder="点「选择」扫描附近 WiFi">
+            <button class="btn-scan" onclick="startScan()">选择</button>
+          </div>
+        </div>
         <div class="fld"><label>上级 WiFi 密码</label><input id="up_key" type="password" placeholder="留空表示无密码"></div>
       </div>
       <div id="pPppoe" style="display:none">
@@ -229,6 +250,13 @@ header button{color:var(--dim);background:transparent;font-size:13px;padding:6px
     <button class="btn-ghost" onclick="reboot()">重启设备</button>
     <button class="btn-ghost" onclick="location.href='/cgi-bin/luci/'">高级设置（LuCI）</button>
     <button class="btn-ghost" onclick="location.href='/cgi-bin/api?action=status'">查看状态 JSON（排障用）</button>
+  </div>
+</div>
+
+<div class="mask" id="scanMask" onclick="if(event.target===this) closeScan()">
+  <div class="sheet">
+    <div class="sheet-h">选择附近 WiFi <span onclick="closeScan()">关闭</span></div>
+    <div id="scanList"></div>
   </div>
 </div>
 
@@ -303,6 +331,50 @@ function applyMode(){
     },9000);
   });
 }
+
+/* ---- 扫描选 WiFi（扫描时 WiFi 会短暂断开，属正常） ---- */
+function startScan(){
+  $('scanMask').classList.add('show');
+  $('scanList').innerHTML='<div class="empty">正在扫描…WiFi 会短暂断开几秒，属正常现象</div>';
+  post({action:'scan'}).then(function(){ pollScan(); });
+}
+function pollScan(){
+  var n=0;
+  var t=setInterval(function(){
+    n++;
+    if(n>25){ clearInterval(t); $('scanList').innerHTML='<div class="empty">扫描超时，请重试</div>'; return; }
+    fetch(API+'?action=scan_result').then(function(r){return r.json();}).then(function(j){
+      if(j.ok){ clearInterval(t); renderScan(j.list); }
+    }).catch(function(){});
+  },1500);
+}
+function renderScan(list){
+  if(!list||!list.length){ $('scanList').innerHTML='<div class="empty">没扫到可用网络，换个位置再试</div>'; return; }
+  $('scanList').innerHTML=list.map(function(w){
+    var s=sigBars(w.signal);
+    return '<div class="wifi-item" onclick="pickWifi(\''+encodeURIComponent(w.ssid)+'\','+(w.open?1:0)+')">'+
+      '<span class="sig '+s.c+'">'+s.b+'</span>'+
+      '<span class="nm">'+esc(w.ssid)+'</span>'+
+      '<span class="lk">'+(w.open?'开放':(w.enc||'需密码'))+' · '+w.signal+'dBm</span></div>';
+  }).join('');
+}
+function sigBars(d){
+  if(d>=-60) return {b:'▮▮▮',c:'s1'};
+  if(d>=-75) return {b:'▮▮▯',c:'s2'};
+  return {b:'▮▯▯',c:'s3'};
+}
+function pickWifi(ssid,open){
+  $('up_ssid').value=decodeURIComponent(ssid);
+  closeScan();
+  if(open){
+    $('up_key').value=''; $('up_key').placeholder='开放网络，无需密码';
+    toast('已选择（开放网络无需密码）');
+  } else {
+    $('up_key').placeholder='请输入该 WiFi 密码'; $('up_key').focus();
+    toast('已填名称，请补密码');
+  }
+}
+function closeScan(){ $('scanMask').classList.remove('show'); }
 
 function saveWifi(){
   if(!$('ssid').value){ toast('WiFi 名称不能为空'); return; }
